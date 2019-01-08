@@ -1,0 +1,32 @@
+server:
+  port: 7581
+
+spring:
+  application:
+    name: Shop Solution
+
+  data:
+    mongodb:
+      host: 127.0.0.1
+      database: shop
+      port: 27017
+
+
+  jackson:
+    serialization.indent_output: true
+
+
+  messages:
+    basename: i18n/messages
+
+
+  thymeleaf:
+    mode: HTML
+    cache: false
+
+
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
