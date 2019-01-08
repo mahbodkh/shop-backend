@@ -5,6 +5,8 @@ import app.store.persistence.repository.CartRepository;
 import app.store.service.dto.CartDto;
 import app.store.service.mapper.CartMapper;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -40,4 +42,18 @@ public class CartService {
     }
 
 
+    public Optional<CartDto> updateCart(CartDto cartDto, String id) {
+        Optional<Cart> cart = cartRepository.findById(new ObjectId(id));
+        Cart result = cart.get();
+        return Optional.of(cartMapper.toDto(result));
+    }
+
+    public void deleteCart(String id) {
+        cartRepository.deleteById(new ObjectId(id));
+    }
+
+    public Page<CartDto> getAllCart(Pageable pageable) {
+
+        return null;
+    }
 }

@@ -4,18 +4,26 @@ import app.store.service.CartService;
 import app.store.service.CommodityService;
 import app.store.service.UserService;
 import app.store.service.dto.CartDto;
+import app.store.web.rest.error.BadRequestAlertException;
 import app.store.web.rest.error.CartNotFoundException;
 import app.store.web.rest.error.CommodityNotFoundException;
 import app.store.web.rest.error.UserNotFoundException;
 import app.store.web.rest.util.HeaderUtil;
+import app.store.web.rest.util.PaginationUtil;
+import app.store.web.rest.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -57,7 +65,7 @@ public class CartResource {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/cart/{id}")
     public ResponseEntity<CartDto> getCart(@PathVariable String id) {
         log.debug("REST request to get Cart : {}", id);
         Optional<CartDto> cart = cartService.getCart(id);
@@ -66,7 +74,35 @@ public class CartResource {
                 .body(cart.get());
     }
 
+    @PutMapping("/cart/{id}")
+    public ResponseEntity<CartDto> updateCart(@Valid @RequestBody CartDto cartDto, @PathVariable String id) {
+        log.debug("REST request to update Cart : {} with id : {}", cartDto, id);
+        if (id == null)
+            throw new BadRequestAlertException("Card ID is null", "CartDto", "updateCart");
+        else if (!cartService.isExists(id))
+            throw new CartNotFoundException();
+        else if (cartDto == null)
+            throw new CartNotFoundException();
+        else {
+            Optional<CartDto> resultCartDto = cartService.updateCart(cartDto, id);
+            return ResponseUtil.wrapOrNotFound(resultCartDto,
+                    HeaderUtil.createAlert("cart.updated", ""));
+        }
+    }
 
 
+    @DeleteMapping("/cart/{id}")
+    public ResponseEntity<Void> deleteCart(@PathVariable String id) {
+        log.debug("REST request to delete User: {}", id);
+        cartService.deleteCart(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("cart.deleted", id)).build();
+    }
+
+        @GetMapping("/users")
+        public ResponseEntity<List<CartDto>> getAllUsers(Pageable pageable) {
+        final Page<CartDto> page = cartService.getAllCart(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 
 }
