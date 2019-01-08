@@ -86,20 +86,20 @@ public class CartResource {
         else {
             Optional<CartDto> resultCartDto = cartService.updateCart(cartDto, id);
             return ResponseUtil.wrapOrNotFound(resultCartDto,
-                    HeaderUtil.createAlert("cart.updated", ""));
+                    HeaderUtil.createAlert("cart.updated", id));
         }
     }
 
 
     @DeleteMapping("/cart/{id}")
     public ResponseEntity<Void> deleteCart(@PathVariable String id) {
-        log.debug("REST request to delete User: {}", id);
+        log.debug("REST request to delete Cart: {}", id);
         cartService.deleteCart(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("cart.deleted", id)).build();
     }
 
-        @GetMapping("/users")
-        public ResponseEntity<List<CartDto>> getAllUsers(Pageable pageable) {
+    @GetMapping("/carts")
+    public ResponseEntity<List<CartDto>> getAllUsers(Pageable pageable) {
         final Page<CartDto> page = cartService.getAllCart(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
