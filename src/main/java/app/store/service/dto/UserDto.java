@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class UserDto {
 
     private List<AddressDto> addresses;
 
-    private Set<String> authorities;
+    private Set<String> authorities = new HashSet<>();
 
     private Instant lastModifiedDate;
     private String lastModifiedBy;

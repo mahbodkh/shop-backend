@@ -3,9 +3,9 @@ package app.store.service.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommodityDto {
+public class ProductDto {
 
-    public CommodityDto() {
+    public ProductDto() {
     }
 
     private String id;
@@ -17,7 +17,7 @@ public class CommodityDto {
     private String cover;
     private List<AssetDto> assetList = new ArrayList<>();
     private List<VariantDto> variants = new ArrayList<>();
-    List<String> relate = new ArrayList<>();
+    private List<String> relate = new ArrayList<>();
     private List<KeywordDto> keywords = new ArrayList<>();
 
     public String getId() {

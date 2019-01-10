@@ -1,12 +1,13 @@
 package app.store.persistence.domain;
 
+import app.store.persistence.domain.enums.ProductStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "cart")
 public class Cart extends AbstractAuditingEntity implements Serializable {
@@ -18,13 +19,13 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
     @Field
     private ObjectId userId;
     @Field
-    private ObjectId productId;
+    private List<ObjectId> productIdList;
     @Field
     private Integer quantity = 0;
     @Field
-    private Double price = 0d;
+    private Double total = 0d;
     @Field
-    private Boolean completed = false;
+    private ProductStatus status;
 
 
     public ObjectId getId() {
@@ -43,12 +44,12 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
         this.userId = userId;
     }
 
-    public ObjectId getProductId() {
-        return productId;
+    public List<ObjectId> getProductIdList() {
+        return productIdList;
     }
 
-    public void setProductId(ObjectId productId) {
-        this.productId = productId;
+    public void setProductIdList(List<ObjectId> productIdList) {
+        this.productIdList = productIdList;
     }
 
     public Integer getQuantity() {
@@ -59,20 +60,20 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
         this.quantity = quantity;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
-    public Boolean getCompleted() {
-        return completed;
+    public ProductStatus getStatus() {
+        return status;
     }
 
-    public void setCompleted(Boolean completed) {
-        this.completed = completed;
+    public void setStatus(ProductStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -93,10 +94,10 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
         return "Cart{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", productId=" + productId +
+                ", productIdList=" + productIdList +
                 ", quantity=" + quantity +
-                ", price=" + price +
-                ", completed=" + completed +
+                ", total=" + total +
+                ", status=" + status +
                 '}';
     }
 }

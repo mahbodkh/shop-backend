@@ -1,7 +1,7 @@
 package app.store.web.rest;
 
 import app.store.service.CartService;
-import app.store.service.CommodityService;
+import app.store.service.ProductService;
 import app.store.service.UserService;
 import app.store.service.dto.CartDto;
 import app.store.web.rest.error.BadRequestAlertException;
@@ -33,13 +33,13 @@ public class CartResource {
 
     private final CartService cartService;
     private final UserService userService;
-    private final CommodityService commodityService;
+    private final ProductService productService;
 
-    public CartResource(CartService cartService, UserService userService, CommodityService commodityService) {
+    public CartResource(CartService cartService, UserService userService, ProductService productService) {
 
         this.cartService = cartService;
         this.userService = userService;
-        this.commodityService = commodityService;
+        this.productService = productService;
     }
 
     @PostMapping("/cart")
@@ -50,9 +50,10 @@ public class CartResource {
                 throw new UserNotFoundException();
             }
             throw new UserNotFoundException();
-        } else if (cartDto.getProductId() != null) {
-            if (!commodityService.isExists(cartDto.getProductId())) {
-                throw new CommodityNotFoundException();
+        } else if (cartDto.getProductIdList() != null) {
+            for (String cart : cartDto.getProductIdList()) {
+                if (!productService.isExists(cart))
+                    throw new CommodityNotFoundException();
             }
             throw new CommodityNotFoundException();
         } else if (!cartService.isExists(cartDto.getId())) {
@@ -98,9 +99,9 @@ public class CartResource {
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("cart.deleted", id)).build();
     }
 
-    @GetMapping("/carts")
-    public ResponseEntity<List<CartDto>> getAllUsers(Pageable pageable) {
-        final Page<CartDto> page = cartService.getAllCart(pageable);
+    @GetMapping("/carts/{id}")
+    public ResponseEntity<List<CartDto>> getAllUsers(@Valid @PathVariable String id, Pageable pageable) {
+        final Page<CartDto> page = cartService.getAllCart(id, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

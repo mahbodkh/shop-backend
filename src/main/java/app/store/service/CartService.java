@@ -1,6 +1,7 @@
 package app.store.service;
 
 import app.store.persistence.domain.Cart;
+import app.store.persistence.domain.enums.ProductStatus;
 import app.store.persistence.repository.CartRepository;
 import app.store.service.dto.CartDto;
 import app.store.service.mapper.CartMapper;
@@ -8,9 +9,12 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +29,6 @@ public class CartService {
         this.cartRepository = cartRepository;
         this.cartMapper = cartMapper;
     }
-
 
     public Optional<CartDto> saveCart(CartDto cartDto) {
         Cart cart = cartRepository.save(cartMapper.toEntity(cartDto));
@@ -50,9 +53,16 @@ public class CartService {
                 .map(Optional::get)
                 .map(result -> {
                     result.setId(new ObjectId(id));
-                    result.setCompleted(cartDto.getCompleted());
-                    result.setPrice(cartDto.getPrice());
-                    result.setProductId(new ObjectId(cartDto.getProductId()));
+                    result.setStatus(ProductStatus.valueOf(cartDto.getStatus()));
+                    result.setTotal(cartDto.getTotal());
+
+                    List<String> cartDtoProductList = cartDto.getProductIdList();
+                    List<ObjectId> prepare = new ArrayList<>();
+                    for (String cart : cartDtoProductList) {
+                        prepare.add(new ObjectId(cart));
+                    }
+                    result.setProductIdList(prepare);
+
                     result.setUserId(new ObjectId(cartDto.getUserId()));
                     result.setQuantity(cartDto.getQuantity());
 
@@ -67,8 +77,9 @@ public class CartService {
         cartRepository.deleteById(new ObjectId(id));
     }
 
-    public Page<CartDto> getAllCart(Pageable pageable) {
-
-        return null;
+    public Page<CartDto> getAllCart(String id, Pageable pageable) {
+        Page<Cart> allByUserIdAndStatus = cartRepository.findAllByUserIdAndStatus(pageable, new ObjectId(id), ProductStatus.COMPLETE);
+        List<CartDto> cartDtos = cartMapper.toDto(allByUserIdAndStatus.getContent());
+        return new PageImpl<CartDto>(cartDtos);
     }
 }

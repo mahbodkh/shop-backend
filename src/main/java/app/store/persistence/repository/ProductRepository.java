@@ -1,6 +1,6 @@
 package app.store.persistence.repository;
 
-import app.store.persistence.domain.Commodity;
+import app.store.persistence.domain.Product;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CommodityRepository extends MongoRepository<Commodity, ObjectId> {
+public interface ProductRepository extends MongoRepository<Product, ObjectId> {
 
-    Optional<Commodity> findOneById(ObjectId id);
+    Optional<Product> findOneById(ObjectId id);
 
 
 }

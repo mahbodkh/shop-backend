@@ -1,5 +1,9 @@
 package app.store.service.dto;
 
+
+import java.util.List;
+import java.util.Set;
+
 public class CartDto {
 
     public CartDto() {
@@ -7,10 +11,11 @@ public class CartDto {
 
     private String id;
     private String userId;
-    private String productId;
+    private List<String> productIdList;
     private Integer quantity = 0;
-    private Double price = 0d;
-    private Boolean completed = false;
+    private Double total = 0d;
+    private String status;
+
 
     public String getId() {
         return id;
@@ -28,12 +33,12 @@ public class CartDto {
         this.userId = userId;
     }
 
-    public String getProductId() {
-        return productId;
+    public List<String> getProductIdList() {
+        return productIdList;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductIdList(List<String> productIdList) {
+        this.productIdList = productIdList;
     }
 
     public Integer getQuantity() {
@@ -44,19 +49,20 @@ public class CartDto {
         this.quantity = quantity;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
-    public Boolean getCompleted() {
-        return completed;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCompleted(Boolean completed) {
-        this.completed = completed;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
 }

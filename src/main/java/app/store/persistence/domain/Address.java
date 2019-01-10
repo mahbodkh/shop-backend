@@ -1,7 +1,5 @@
 package app.store.persistence.domain;
 
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.io.Serializable;
 
 public class Address implements Serializable {
@@ -11,13 +9,10 @@ public class Address implements Serializable {
     private String fullAddress;
     private String zone;
     private String city;
-
-    @Field("longitude")
+    private String zipCode;
+    private String province;
     private String longitude;
-
-    @Field("latitude")
     private String latitude;
-
 
     public String getName() {
         return name;
@@ -51,6 +46,22 @@ public class Address implements Serializable {
         this.city = city;
     }
 
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public String getLongitude() {
         return longitude;
     }
@@ -74,6 +85,8 @@ public class Address implements Serializable {
                 ", fullAddress='" + fullAddress + '\'' +
                 ", zone='" + zone + '\'' +
                 ", city='" + city + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", province='" + province + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
                 '}';

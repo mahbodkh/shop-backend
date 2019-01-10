@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@org.springframework.data.mongodb.core.mapping.Document(collection = "commodity")
-public class Commodity extends AbstractAuditingEntity implements Serializable {
+@org.springframework.data.mongodb.core.mapping.Document(collection = "product")
+public class Product extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -154,8 +154,8 @@ public class Commodity extends AbstractAuditingEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Commodity commodity = (Commodity) o;
-        return Objects.equals(id, commodity.id);
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class Commodity extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Commodity{" +
+        return "Product{" +
                 "id=" + id +
                 ", descriptions=" + descriptions +
                 ", stock=" + stock +
