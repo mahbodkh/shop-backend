@@ -2,19 +2,10 @@ package app.store.service.dto;
 
 public class KeywordDto {
 
-    private String id;
     private String name;
     private String description;
 
     public KeywordDto() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

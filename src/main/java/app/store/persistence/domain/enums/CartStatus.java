@@ -1,6 +1,6 @@
 package app.store.persistence.domain.enums;
 
-public enum ProductStatus {
+public enum CartStatus {
     ACTIVE,
     COMPLETE,
     SUSPEND,

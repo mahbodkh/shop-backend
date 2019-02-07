@@ -1,21 +1,12 @@
 package app.store.service.dto;
 
-public class BrandDto {
+public class VendorDto {
 
-    private String id;
     private String cover;
     private String name;
     private DescriptionDto description;
 
-    public BrandDto() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public VendorDto() {
     }
 
     public String getCover() {

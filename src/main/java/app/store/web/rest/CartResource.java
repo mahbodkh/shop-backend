@@ -6,7 +6,7 @@ import app.store.service.UserService;
 import app.store.service.dto.CartDto;
 import app.store.web.rest.error.BadRequestAlertException;
 import app.store.web.rest.error.CartNotFoundException;
-import app.store.web.rest.error.CommodityNotFoundException;
+import app.store.web.rest.error.ProductNotFoundException;
 import app.store.web.rest.error.UserNotFoundException;
 import app.store.web.rest.util.HeaderUtil;
 import app.store.web.rest.util.PaginationUtil;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class CartResource {
     private final Logger log = LoggerFactory.getLogger(CartResource.class);
 
@@ -53,16 +53,16 @@ public class CartResource {
         } else if (cartDto.getProductIdList() != null) {
             for (String cart : cartDto.getProductIdList()) {
                 if (!productService.isExists(cart))
-                    throw new CommodityNotFoundException();
+                    throw new ProductNotFoundException();
             }
-            throw new CommodityNotFoundException();
-        } else if (!cartService.isExists(cartDto.getId())) {
-            throw new CartNotFoundException();
+            throw new ProductNotFoundException();
+//        } else if (!cartService.isExists(cartDto)) {
+//            throw new CartNotFoundException();
         } else {
-            Optional<CartDto> resultCartDto = cartService.saveCart(cartDto);
-            return ResponseEntity.created(new URI("/api/cart/" + resultCartDto.get().getId()))
-                    .headers(HeaderUtil.createAlert("cart.created", resultCartDto.get().getId()))
-                    .body(resultCartDto.get().getId());
+            String cartId = cartService.saveCart(cartDto);
+            return ResponseEntity.created(new URI("/api/cart/" + cartId))
+                    .headers(HeaderUtil.createAlert("cart.created", "isLogin or "))
+                    .body(cartId);
         }
     }
 
@@ -71,7 +71,7 @@ public class CartResource {
         log.debug("REST request to get Cart : {}", id);
         Optional<CartDto> cart = cartService.getCart(id);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert("cart.get", cart.get().getId()))
+                .headers(HeaderUtil.createAlert("cart.get", "isLogin or "))
                 .body(cart.get());
     }
 
@@ -87,7 +87,7 @@ public class CartResource {
         else {
             Optional<CartDto> resultCartDto = cartService.updateCart(cartDto, id);
             return ResponseUtil.wrapOrNotFound(resultCartDto,
-                    HeaderUtil.createAlert("cart.updated", id));
+                    HeaderUtil.createAlert("cart.updated", "isLogin or "));
         }
     }
 
@@ -96,7 +96,7 @@ public class CartResource {
     public ResponseEntity<Void> deleteCart(@PathVariable String id) {
         log.debug("REST request to delete Cart: {}", id);
         cartService.deleteCart(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert("cart.deleted", id)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("cart.deleted", "isLogin or ")).build();
     }
 
     @GetMapping("/carts/{id}")

@@ -1,6 +1,10 @@
 package app.store.service.dto;
 
 public class AddressDto {
+
+    public AddressDto() {
+    }
+
     private String name;
     private String fullAddress;
     private String zone;

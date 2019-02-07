@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "invoice")
 public class Invoice extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id

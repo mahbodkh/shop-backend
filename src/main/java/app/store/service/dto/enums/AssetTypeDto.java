@@ -4,7 +4,7 @@ public enum AssetTypeDto {
 
     VIDEO,
     IMAGE_THUMBNAIL,
-    IMAGE_ORIGENAL,
+    IMAGE_ORIGINAL,
     IMAGE_BLUR,
     AUDIO;
 

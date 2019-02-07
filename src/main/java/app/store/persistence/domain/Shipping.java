@@ -2,11 +2,12 @@ package app.store.persistence.domain;
 
 import java.io.Serializable;
 
-public class Address implements Serializable {
+public class Shipping implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String name;
     private String fullAddress;
+    private String phone;
     private String zone;
     private String city;
     private String zipCode;
@@ -80,7 +81,7 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "Address{" +
+        return "Shipping{" +
                 "name='" + name + '\'' +
                 ", fullAddress='" + fullAddress + '\'' +
                 ", zone='" + zone + '\'' +

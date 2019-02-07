@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "payment")
 public class Payment implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -28,6 +27,9 @@ public class Payment implements Serializable {
 
     @Field
     private Instant transaction;
+
+    @Field
+    private String method;
 
 
     public ObjectId getId() {
@@ -70,6 +72,14 @@ public class Payment implements Serializable {
         this.transaction = transaction;
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,6 +101,7 @@ public class Payment implements Serializable {
                 ", bankId=" + bankId +
                 ", amount=" + amount +
                 ", transaction=" + transaction +
+                ", method=" + method +
                 '}';
     }
 }

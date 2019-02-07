@@ -1,5 +1,6 @@
 package app.store.service.dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,24 +9,28 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    private String id;
+    @NotNull
+    private String title;
     private List<DescriptionDto> description;
+    private String categoryPath;
+    private List<String> categories = new ArrayList<>();
     private Integer stock;
-    private BrandDto brand;
+    private VendorDto brand;
     private PriceDto price;
+    private DimensionDto dimensionDto;
     private Integer sold = 0;
     private String cover;
-    private List<AssetDto> assetList = new ArrayList<>();
+    private List<MediaDto> mediaList = new ArrayList<>();
     private List<VariantDto> variants = new ArrayList<>();
-    private List<String> relate = new ArrayList<>();
+    private List<String> relateProduct = new ArrayList<>();
     private List<KeywordDto> keywords = new ArrayList<>();
 
-    public String getId() {
-        return id;
+    public String getTitle() {
+        return title;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<DescriptionDto> getDescription() {
@@ -36,6 +41,22 @@ public class ProductDto {
         this.description = description;
     }
 
+    public String getCategoryPath() {
+        return categoryPath;
+    }
+
+    public void setCategoryPath(String categoryPath) {
+        this.categoryPath = categoryPath;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
     public Integer getStock() {
         return stock;
     }
@@ -44,11 +65,11 @@ public class ProductDto {
         this.stock = stock;
     }
 
-    public BrandDto getBrand() {
+    public VendorDto getBrand() {
         return brand;
     }
 
-    public void setBrand(BrandDto brand) {
+    public void setBrand(VendorDto brand) {
         this.brand = brand;
     }
 
@@ -58,6 +79,14 @@ public class ProductDto {
 
     public void setPrice(PriceDto price) {
         this.price = price;
+    }
+
+    public DimensionDto getDimensionDto() {
+        return dimensionDto;
+    }
+
+    public void setDimensionDto(DimensionDto dimensionDto) {
+        this.dimensionDto = dimensionDto;
     }
 
     public Integer getSold() {
@@ -76,12 +105,12 @@ public class ProductDto {
         this.cover = cover;
     }
 
-    public List<AssetDto> getAssetList() {
-        return assetList;
+    public List<MediaDto> getMediaList() {
+        return mediaList;
     }
 
-    public void setAssetList(List<AssetDto> assetList) {
-        this.assetList = assetList;
+    public void setMediaList(List<MediaDto> mediaList) {
+        this.mediaList = mediaList;
     }
 
     public List<VariantDto> getVariants() {
@@ -92,12 +121,12 @@ public class ProductDto {
         this.variants = variants;
     }
 
-    public List<String> getRelate() {
-        return relate;
+    public List<String> getRelateProduct() {
+        return relateProduct;
     }
 
-    public void setRelate(List<String> relate) {
-        this.relate = relate;
+    public void setRelateProduct(List<String> relateProduct) {
+        this.relateProduct = relateProduct;
     }
 
     public List<KeywordDto> getKeywords() {

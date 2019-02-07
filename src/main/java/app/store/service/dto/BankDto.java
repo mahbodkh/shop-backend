@@ -5,21 +5,12 @@ public class BankDto {
     public BankDto() {
     }
 
-    private String id;
     private String name;                        // name of the bank , mellat , passargad ,
     private String merchant;                    // some banks need merchant id for detect you
     private String gatewayUrl;                  // the main uri for payment
     private String gatewayPostfix;              // the main postfix
     private String gatewayPostfixMobile;        // the postfix when your client use the mobile
     private String gatewayPostfixWeb;           // the postfix when your client use the web / browser
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

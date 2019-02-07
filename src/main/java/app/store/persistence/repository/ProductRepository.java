@@ -12,5 +12,7 @@ public interface ProductRepository extends MongoRepository<Product, ObjectId> {
 
     Optional<Product> findOneById(ObjectId id);
 
+    Optional<Product> findOneByTitle(String title);
+
 
 }

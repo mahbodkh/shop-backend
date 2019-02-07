@@ -28,8 +28,13 @@ public final class ErrorConstants {
     public static final URI USER_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/user-not-found");
     public static final URI USER_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/user-already-used");
 
-    public static final URI COMMODITY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/commodity-not-found");
-    public static final URI COMMODITY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/commodity-already-used");
+    public static final URI PRODUCT_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/product-not-found");
+    public static final URI PRODUCT_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/product-already-used");
+    public static final URI PRODUCT_INVALID_DATA = URI.create(PROBLEM_BASE_URL + "/product-invalid");
+
+    public static final URI CATEGORY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "category-not-found");
+    public static final URI CATEGORY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "category-already-used");
+
 
     private ErrorConstants() {
     }

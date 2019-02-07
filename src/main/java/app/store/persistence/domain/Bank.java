@@ -10,7 +10,6 @@ import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "bank")
 public class Bank extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id

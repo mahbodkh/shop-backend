@@ -1,7 +1,7 @@
 package app.store.service;
 
 import app.store.persistence.domain.Cart;
-import app.store.persistence.domain.enums.ProductStatus;
+import app.store.persistence.domain.enums.CartStatus;
 import app.store.persistence.repository.CartRepository;
 import app.store.service.dto.CartDto;
 import app.store.service.mapper.CartMapper;
@@ -30,10 +30,8 @@ public class CartService {
         this.cartMapper = cartMapper;
     }
 
-    public Optional<CartDto> saveCart(CartDto cartDto) {
-        Cart cart = cartRepository.save(cartMapper.toEntity(cartDto));
-        CartDto resultCartDto = cartMapper.toDto(cart);
-        return Optional.of(resultCartDto);
+    public String saveCart(CartDto cartDto) {
+        return cartRepository.save(cartMapper.toEntity(cartDto)).getId().toString();
     }
 
     public Boolean isExists(String cartId) {
@@ -53,7 +51,7 @@ public class CartService {
                 .map(Optional::get)
                 .map(result -> {
                     result.setId(new ObjectId(id));
-                    result.setStatus(ProductStatus.valueOf(cartDto.getStatus()));
+                    result.setStatus(CartStatus.valueOf(cartDto.getStatus()));
                     result.setTotal(cartDto.getTotal());
 
                     List<String> cartDtoProductList = cartDto.getProductIdList();
@@ -78,7 +76,7 @@ public class CartService {
     }
 
     public Page<CartDto> getAllCart(String id, Pageable pageable) {
-        Page<Cart> allByUserIdAndStatus = cartRepository.findAllByUserIdAndStatus(pageable, new ObjectId(id), ProductStatus.COMPLETE);
+        Page<Cart> allByUserIdAndStatus = cartRepository.findAllByUserIdAndStatus(pageable, new ObjectId(id), CartStatus.COMPLETE);
         List<CartDto> cartDtos = cartMapper.toDto(allByUserIdAndStatus.getContent());
         return new PageImpl<CartDto>(cartDtos);
     }

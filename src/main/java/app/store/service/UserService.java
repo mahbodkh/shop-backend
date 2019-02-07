@@ -12,7 +12,9 @@ import app.store.service.util.RandomUtil;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -147,5 +149,20 @@ public class UserService {
                     return userMapper.toDto(save);
                 });
     }
+
+//    @Transactional
+//    public User loadUserByMobile(String mobile) {
+//        User user = userRepository.findOneByMobile(Long.valueOf(mobile))
+//                .orElseThrow(() ->
+//                        new UsernameNotFoundException("User Not Found with -> mobile or email : " + mobile)
+//                );
+//        return user;
+//    }
+
+//    List<GrantedAuthority> authorities = user.getAuthorities().stream().map(role ->
+//            new SimpleGrantedAuthority(role.getName())
+//    ).collect(Collectors.toList());
+//
+
 
 }

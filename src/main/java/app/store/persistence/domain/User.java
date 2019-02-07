@@ -20,7 +20,6 @@ import java.util.Set;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -85,7 +84,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String cardNumber;
 
     @Field
-    private List<Address> addresses;
+    private List<Shipping> shippings;
 
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
@@ -214,12 +213,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public List<Shipping> getShippings() {
+        return shippings;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setShippings(List<Shipping> shippings) {
+        this.shippings = shippings;
     }
 
     public Set<Authority> getAuthorities() {
@@ -275,7 +274,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
                 ", resetKey='" + resetKey + '\'' +
                 ", resetDate=" + resetDate +
                 ", cardNumber='" + cardNumber + '\'' +
-                ", addresses=" + addresses +
+                ", shippings=" + shippings +
                 ", authorities=" + authorities +
                 ", data=" + data +
                 '}';

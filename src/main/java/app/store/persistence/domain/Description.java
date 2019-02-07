@@ -1,6 +1,5 @@
 package app.store.persistence.domain;
 
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Size;
@@ -11,7 +10,6 @@ public class Description implements Serializable {
 
     private String language;
 
-    @Indexed
     @Field
     @Size(min = 2, max = 120)
     private String name;
@@ -19,6 +17,7 @@ public class Description implements Serializable {
     @Field
     @Size(min = 5, max = 2000)
     private String shortDescribe;
+
     @Field
     @Size(min = 5, max = 5000)
     private String longDescribe;

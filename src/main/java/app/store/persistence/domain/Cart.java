@@ -1,6 +1,6 @@
 package app.store.persistence.domain;
 
-import app.store.persistence.domain.enums.ProductStatus;
+import app.store.persistence.domain.enums.CartStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -25,7 +25,7 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
     @Field
     private Double total = 0d;
     @Field
-    private ProductStatus status;
+    private CartStatus status;
 
 
     public ObjectId getId() {
@@ -68,11 +68,11 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
         this.total = total;
     }
 
-    public ProductStatus getStatus() {
+    public CartStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ProductStatus status) {
+    public void setStatus(CartStatus status) {
         this.status = status;
     }
 

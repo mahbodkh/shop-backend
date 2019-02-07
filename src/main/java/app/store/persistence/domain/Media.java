@@ -9,8 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Asset implements Serializable {
-
+public class Media implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private ObjectId id;
@@ -102,8 +101,8 @@ public class Asset implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Asset asset = (Asset) o;
-        return Objects.equals(id, asset.id);
+        Media media = (Media) o;
+        return Objects.equals(id, media.id);
     }
 
     @Override
@@ -113,7 +112,7 @@ public class Asset implements Serializable {
 
     @Override
     public String toString() {
-        return "Asset{" +
+        return "Media{" +
                 "id=" + id +
                 ", type=" + type +
                 ", name='" + name + '\'' +

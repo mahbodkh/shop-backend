@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "authority")
 public class Authority implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @NotNull

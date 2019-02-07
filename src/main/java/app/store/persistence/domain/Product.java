@@ -1,11 +1,10 @@
 package app.store.persistence.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,44 +13,39 @@ import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "product")
 public class Product extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
     private ObjectId id;
-
+    @Field
+    @Indexed
+    private String title;
     @Field
     List<Description> descriptions = new ArrayList<>();
-
+    @Field
+    private String categoryPath;
+    @Field
+    private List<ObjectId> categories = new ArrayList<>();
     @Field
     private Integer stock;
-
     @Field
-    private Brand brand;
-
+    private Vendor vendor;
     @Field
     private Price price;
-
     @Field
     private Integer sold = 0;
-
     @Field
     private String cover;
-
     @Field
-    private List<Asset> assetList = new ArrayList<>();
-
+    private Dimension dimension;
+    @Field
+    private List<Media> mediaList = new ArrayList<>();
     @Field
     private List<Variant> variants = new ArrayList<>();
-
     @Field
-    List<ObjectId> relate = new ArrayList<>();
-
+    private List<ObjectId> relateProduct = new ArrayList<>();
     @Field
     private List<Keyword> keywords = new ArrayList<>();
-
-    @JsonIgnore
-    private MultipartFile data;
 
 
     public ObjectId getId() {
@@ -62,12 +56,36 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public List<Description> getDescriptions() {
         return descriptions;
     }
 
     public void setDescriptions(List<Description> descriptions) {
         this.descriptions = descriptions;
+    }
+
+    public String getCategoryPath() {
+        return categoryPath;
+    }
+
+    public void setCategoryPath(String categoryPath) {
+        this.categoryPath = categoryPath;
+    }
+
+    public List<ObjectId> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<ObjectId> categories) {
+        this.categories = categories;
     }
 
     public Integer getStock() {
@@ -78,12 +96,12 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.stock = stock;
     }
 
-    public Brand getBrand() {
-        return brand;
+    public Vendor getVendor() {
+        return vendor;
     }
 
-    public void setBrand(Brand brand) {
-        this.brand = brand;
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
     }
 
     public Price getPrice() {
@@ -110,12 +128,20 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.cover = cover;
     }
 
-    public List<Asset> getAssetList() {
-        return assetList;
+    public Dimension getDimension() {
+        return dimension;
     }
 
-    public void setAssetList(List<Asset> assetList) {
-        this.assetList = assetList;
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
+    }
+
+    public List<Media> getMediaList() {
+        return mediaList;
+    }
+
+    public void setMediaList(List<Media> mediaList) {
+        this.mediaList = mediaList;
     }
 
     public List<Variant> getVariants() {
@@ -126,12 +152,12 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.variants = variants;
     }
 
-    public List<ObjectId> getRelate() {
-        return relate;
+    public List<ObjectId> getRelateProduct() {
+        return relateProduct;
     }
 
-    public void setRelate(List<ObjectId> relate) {
-        this.relate = relate;
+    public void setRelateProduct(List<ObjectId> relateProduct) {
+        this.relateProduct = relateProduct;
     }
 
     public List<Keyword> getKeywords() {
@@ -142,13 +168,6 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.keywords = keywords;
     }
 
-    public MultipartFile getData() {
-        return data;
-    }
-
-    public void setData(MultipartFile data) {
-        this.data = data;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -163,21 +182,25 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         return Objects.hash(id);
     }
 
+
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
+                ", title='" + title + '\'' +
                 ", descriptions=" + descriptions +
+                ", categoryPath='" + categoryPath + '\'' +
+                ", categories=" + categories +
                 ", stock=" + stock +
-                ", brand=" + brand +
+                ", vendor=" + vendor +
                 ", price=" + price +
                 ", sold=" + sold +
                 ", cover='" + cover + '\'' +
-                ", assetList=" + assetList +
+                ", dimension=" + dimension +
+                ", mediaList=" + mediaList +
                 ", variants=" + variants +
-                ", relate=" + relate +
+                ", relateProduct=" + relateProduct +
                 ", keywords=" + keywords +
-                ", data=" + data +
                 '}';
     }
 }
