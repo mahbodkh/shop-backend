@@ -31,10 +31,12 @@ public class CartService {
     }
 
     public String saveCart(CartDto cartDto) {
+        log.debug("Save Information for Cart: {}", cartDto);
         return cartRepository.save(cartMapper.toEntity(cartDto)).getId().toString();
     }
 
     public Boolean isExists(String cartId) {
+        log.debug("Check Information for Cart id: {}", cartId);
         return cartRepository.existsById(new ObjectId(cartId));
     }
 

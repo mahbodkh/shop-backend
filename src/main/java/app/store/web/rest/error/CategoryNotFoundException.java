@@ -10,4 +10,8 @@ public class CategoryNotFoundException extends AbstractThrowableProblem {
     public CategoryNotFoundException() {
         super(ErrorConstants.CATEGORY_NOT_FOUND_TYPE, "Category not registered", Status.BAD_REQUEST);
     }
+
+    public CategoryNotFoundException(String value) {
+        super(ErrorConstants.CATEGORY_NOT_FOUND_TYPE, value, Status.BAD_REQUEST);
+    }
 }

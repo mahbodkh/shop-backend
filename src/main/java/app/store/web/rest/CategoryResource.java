@@ -2,8 +2,11 @@ package app.store.web.rest;
 
 import app.store.service.CategoryService;
 import app.store.service.dto.CategoryDto;
+import app.store.web.rest.error.BadRequestAlertException;
 import app.store.web.rest.error.CategoryAlreadyUsedException;
+import app.store.web.rest.error.CategoryNotFoundException;
 import app.store.web.rest.util.HeaderUtil;
+import app.store.web.rest.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +38,8 @@ public class CategoryResource {
             throw new CategoryAlreadyUsedException();
         }
         String categoryId = categoryService.createCategory(categoryDto);
-        return ResponseEntity.created(new URI("/api/cart/" + categoryId))
-                .headers(HeaderUtil.createAlert("cart.created", "isLogin or "))
+        return ResponseEntity.created(new URI("/api/category/" + categoryId))
+                .headers(HeaderUtil.createAlert("category.created", "isLogin or "))
                 .body(categoryId);
     }
 
@@ -44,24 +47,40 @@ public class CategoryResource {
     @GetMapping("/category/{id}")
     public ResponseEntity<CategoryDto> getCategory(@Valid @PathVariable String id) {
         log.debug("REST request to get Category : {}", id);
+        if (id == null || !categoryService.isExists(id))
+            throw new CategoryNotFoundException();
         Optional<CategoryDto> category = categoryService.getCategory(id);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert("cart.get", "isLogin or "))
+                .headers(HeaderUtil.createAlert("category.get", "isLogin or "))
                 .body(category.get());
     }
 
 
-
     // sub
     @GetMapping("/category/sub/{id}")
-    public ResponseEntity<List<CategoryDto>> getSubCategories(@PathVariable String id) {
+    public ResponseEntity<List<CategoryDto>> getSubCategories(@Valid @PathVariable String id) {
         log.debug("REST request to get Sub Categories : {}", id);
+        if (id == null || !categoryService.isExists(id))
+            throw new CategoryNotFoundException();
         Optional<List<CategoryDto>> subCategory = categoryService.getSubCategory(id);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert("cart.get", "isLogin or "))
+                .headers(HeaderUtil.createAlert("sub.category.get", "isLogin or "))
                 .body(subCategory.get());
     }
 
 
+    @PutMapping("/category/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @Valid @PathVariable String id) {
+        log.debug("REST request to update User : {} with id : {}", categoryDto, id);
+        if (id == null)
+            throw new BadRequestAlertException("Category ID is null", "CategoryDto", "updateCategory");
+        else if (categoryDto == null || !categoryService.isExists(id))
+            throw new CategoryNotFoundException();
+        else {
+            Optional<CategoryDto> result = categoryService.updateCategory(categoryDto, id);
+            return ResponseUtil.wrapOrNotFound(result,
+                    HeaderUtil.createAlert("categoryManagement.updated", categoryDto.getName()));
+        }
+    }
 
 }

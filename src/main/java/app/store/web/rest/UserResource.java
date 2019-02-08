@@ -67,9 +67,7 @@ public class UserResource {
         log.debug("REST request to update User : {} with id : {}", userDto, id);
         if (id == null)
             throw new BadRequestAlertException("User ID is null", "UserDto", "updateUser");
-        else if (!userService.isExists(id))
-            throw new CartNotFoundException();
-        else if (userDto == null)
+        else if (userDto == null || !userService.isExists(id))
             throw new CartNotFoundException();
         else {
             Optional<UserDto> result = userService.updateUser(userDto, id);

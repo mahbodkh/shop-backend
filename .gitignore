@@ -3,6 +3,10 @@
 ######################
 /target/www/**
 /src/test/javascript/coverage/
+/target/generated-sources/
+/target/generated-sources/annotations/app/store/service/mapper/
+/target/generated-sources/annotations/app/store/service/mapper/**
+/target/**
 
 ######################
 # Node
