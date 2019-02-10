@@ -2,11 +2,20 @@ package app.store.service.dto;
 
 public class VendorDto {
 
+    private String id;
     private String cover;
     private String name;
     private DescriptionDto description;
 
     public VendorDto() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCover() {

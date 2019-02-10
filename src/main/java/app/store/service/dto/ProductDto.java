@@ -9,13 +9,14 @@ public class ProductDto {
     public ProductDto() {
     }
 
+    private String id;
     @NotNull
     private String title;
     private List<DescriptionDto> description;
     private String categoryPath;
     private List<String> categories = new ArrayList<>();
     private Integer stock;
-    private VendorDto brand;
+    private VendorDto vendorDto;
     private PriceDto price;
     private DimensionDto dimensionDto;
     private Integer sold = 0;
@@ -24,6 +25,14 @@ public class ProductDto {
     private List<VariantDto> variants = new ArrayList<>();
     private List<String> relateProduct = new ArrayList<>();
     private List<KeywordDto> keywords = new ArrayList<>();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -65,12 +74,12 @@ public class ProductDto {
         this.stock = stock;
     }
 
-    public VendorDto getBrand() {
-        return brand;
+    public VendorDto getVendorDto() {
+        return vendorDto;
     }
 
-    public void setBrand(VendorDto brand) {
-        this.brand = brand;
+    public void setVendorDto(VendorDto vendorDto) {
+        this.vendorDto = vendorDto;
     }
 
     public PriceDto getPrice() {

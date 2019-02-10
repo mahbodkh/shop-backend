@@ -2,6 +2,7 @@ package app.store.service;
 
 import app.store.persistence.domain.Category;
 import app.store.persistence.repository.CategoryRepository;
+import app.store.persistence.repository.ProductRepository;
 import app.store.service.dto.CategoryDto;
 import app.store.service.mapper.CategoryMapper;
 import app.store.web.rest.error.CategoryAlreadyUsedException;
@@ -23,12 +24,15 @@ public class CategoryService {
     private final Logger log = LoggerFactory.getLogger(CategoryService.class);
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
     private final CategoryMapper categoryMapper;
 
-    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper, ProductRepository productRepository) {
 
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
         this.categoryMapper = categoryMapper;
+
     }
 
     public Optional<Category> isExistByName(String name) {
@@ -152,12 +156,17 @@ public class CategoryService {
     public void deleteCategory(String id) {
         categoryRepository.findOneById(new ObjectId(id))
                 .ifPresent(category -> {
-                    if (isAncestors(category.getId()) && category.getParent() == null && category.getAncestors() == null) {
+                    if (isAncestors(category.getId())) {
+//                        if (isProductExistByCategoryId(category.getId()))
                         categoryRepository.delete(category);
                     }
                     log.debug("Deleted Category: {}", category);
                 });
     }
+
+//    private boolean isProductExistByCategoryId(ObjectId categoryId) {
+//        return productService.isProductExistByCategoryId(categoryId.toString());
+//    }
 
     private boolean isAncestors(ObjectId id) {
         CompletableFuture<List<Category>> allByAncestors = categoryRepository.findAllByAncestors(id);

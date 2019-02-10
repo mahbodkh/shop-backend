@@ -20,7 +20,7 @@ public class Keyword implements Serializable {
     private String name;
 
     @Field
-    private String description;
+    private Description description;
 
 
     public ObjectId getId() {
@@ -39,11 +39,11 @@ public class Keyword implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
+    public Description getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(Description description) {
         this.description = description;
     }
 

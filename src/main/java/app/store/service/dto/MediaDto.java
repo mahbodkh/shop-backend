@@ -4,6 +4,7 @@ import app.store.service.dto.enums.AssetTypeDto;
 
 public class MediaDto {
 
+    private String id;
     private AssetTypeDto type;
     private String name;
     private String url;
@@ -13,6 +14,14 @@ public class MediaDto {
     private Double duration;
 
     public MediaDto() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public AssetTypeDto getType() {

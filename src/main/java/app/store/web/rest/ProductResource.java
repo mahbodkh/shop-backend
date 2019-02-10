@@ -39,9 +39,8 @@ public class ProductResource {
         log.debug("REST request to save Product : {}", productDto);
         if (productDto == null) {
             throw new ProductInvalidException();
-//        } else if (categoryService.isExistByName()){
         }
-        else if (productService.isExistTitle(productDto.getTitle()).isPresent()){
+        else if (productService.getProductByTitle(productDto.getTitle()).isPresent()){
             throw new ProductAlreadyUsedException();
         }
         String productId = productService.createProduct(productDto);
