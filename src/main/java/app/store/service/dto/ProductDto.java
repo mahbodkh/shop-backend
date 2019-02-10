@@ -12,7 +12,7 @@ public class ProductDto {
     private String id;
     @NotNull
     private String title;
-    private List<DescriptionDto> description;
+    private List<DescriptionDto> description = new ArrayList<>();
     private String categoryPath;
     private List<String> categories = new ArrayList<>();
     private Integer stock;

@@ -121,7 +121,8 @@ public class ProductService {
                         List<Media> mediaProduct = new ArrayList<>();
                         mediaProductDto.forEach(mediaDto -> {
                             Media media = new Media();
-                            media.setId(new ObjectId(mediaDto.getId()));
+                            if (mediaDto.getId() != null && !mediaDto.getId().equals(""))
+                                media.setId(new ObjectId(mediaDto.getId()));
                             media.setName(mediaDto.getName());
                             media.setCapacity(mediaDto.getCapacity());
                             media.setUrl(mediaDto.getUrl());
@@ -129,7 +130,7 @@ public class ProductService {
                             media.setHeight(mediaDto.getHeight());
                             media.setWidth(mediaDto.getWidth());
                             media.setType(
-                                    Enum.valueOf(AssetType.class, mediaDto.getName())
+                                    Enum.valueOf(AssetType.class, mediaDto.getType().name())
                             );
                             // TODO Upload Multipart Data
                             if (media.getData() != null) {
@@ -155,7 +156,7 @@ public class ProductService {
                     }
 
                     //variant
-                    if (productDto.getVendorDto() != null) {
+                    if (productDto.getVariants() != null) {
                         List<VariantDto> variantProductDto = productDto.getVariants();
                         List<Variant> variantProduct = new ArrayList<>();
                         variantProductDto.forEach(var -> {
@@ -185,9 +186,11 @@ public class ProductService {
                         List<Keyword> keywordProduct = new ArrayList<>();
                         keywordProductDto.forEach(keywordDto -> {
                             Keyword keyword = new Keyword();
-                            keyword.setId(new ObjectId(keywordDto.getId()));
+                            if (keywordDto.getId() != null && !keywordDto.getId().equals(""))
+                                keyword.setId(new ObjectId(keywordDto.getId()));
                             keyword.setName(keywordDto.getName());
-                            keyword.setDescription(getDescription(keywordDto.getDescriptionDto()));
+                            if (keywordDto.getDescriptionDto() != null)
+                                keyword.setDescription(getDescription(keywordDto.getDescriptionDto()));
                             keywordProduct.add(keyword);
                         });
                         product.setKeywords(keywordProduct);
@@ -221,8 +224,11 @@ public class ProductService {
         return description;
     }
 
-    public Optional<Product> getProduct(String id) {
-        return null;
+    public Optional<ProductDto> getProduct(String id) {
+        return Optional.of(productRepository.findOneById(new ObjectId(id)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(productMapper::toDto);
     }
 
     public List<Product> getAllProductByCategoryId() {

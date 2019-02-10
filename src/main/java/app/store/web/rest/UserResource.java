@@ -54,7 +54,7 @@ public class UserResource {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
+    public ResponseEntity<UserDto> getUser(@Valid @PathVariable String id) {
         log.debug("REST request to get User : {}", id);
         return ResponseUtil.wrapOrNotFound(
                 userService.getUser(id)
@@ -63,7 +63,7 @@ public class UserResource {
 
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<UserDto> updateCart(@Valid @RequestBody UserDto userDto, @PathVariable String id) {
+    public ResponseEntity<UserDto> updateCart(@Valid @RequestBody UserDto userDto, @Valid @PathVariable String id) {
         log.debug("REST request to update User : {} with id : {}", userDto, id);
         if (id == null)
             throw new BadRequestAlertException("User ID is null", "UserDto", "updateUser");
@@ -85,7 +85,7 @@ public class UserResource {
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@Valid @PathVariable String id) {
         log.debug("REST request to delete User : {}", id);
         userService.deleteUser(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("user.deleted", id)).build();
