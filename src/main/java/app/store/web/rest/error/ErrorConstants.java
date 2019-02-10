@@ -34,6 +34,7 @@ public final class ErrorConstants {
 
     public static final URI CATEGORY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "category-not-found");
     public static final URI CATEGORY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "category-already-used");
+    public static final URI CATEGORY_NOT_DELETED_TYPE = URI.create(PROBLEM_BASE_URL + "category-already-category");
 
 
     private ErrorConstants() {

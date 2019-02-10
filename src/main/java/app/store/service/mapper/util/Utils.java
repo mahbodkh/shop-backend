@@ -11,15 +11,14 @@ import org.springframework.stereotype.Service;
 public class Utils {
 
     public ObjectId mapObjectId(String id) {
-        if (id != null)
+        if (id != null && !id.equals(""))
             return new ObjectId(id);
         return null;
     }
 
     public String mapId(ObjectId id) {
-        if (id == null) {
+        if (id == null)
             return "";
-        }
         return id.toString();
     }
 

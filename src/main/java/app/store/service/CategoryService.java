@@ -5,6 +5,7 @@ import app.store.persistence.repository.CategoryRepository;
 import app.store.service.dto.CategoryDto;
 import app.store.service.mapper.CategoryMapper;
 import app.store.web.rest.error.CategoryAlreadyUsedException;
+import app.store.web.rest.error.CategoryCanNotDeletedException;
 import app.store.web.rest.error.CategoryNotFoundException;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -81,6 +82,19 @@ public class CategoryService {
         return Optional.of(categoryMapper.toDto(result));
     }
 
+
+    public Optional<List<CategoryDto>> getRootCategories() {
+        CompletableFuture<List<Category>> categoryList = categoryRepository.findAllByParentIsNullAndAncestorsNotNull();
+        List<Category> result = null;
+        try {
+            result = categoryList.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        log.debug("Get Information for All root Categories");
+        return Optional.of(categoryMapper.toDto(result));
+    }
+
     public Optional<List<CategoryDto>> getSubCategory(String id) {
         CompletableFuture<List<Category>> allByAncestors = categoryRepository.findAllByAncestors(new ObjectId(id));
         log.debug("Get Information for Sub Categories: {}", id);
@@ -135,4 +149,27 @@ public class CategoryService {
     }
 
 
+    public void deleteCategory(String id) {
+        categoryRepository.findOneById(new ObjectId(id))
+                .ifPresent(category -> {
+                    if (isAncestors(category.getId()) && category.getParent() == null && category.getAncestors() == null) {
+                        categoryRepository.delete(category);
+                    }
+                    log.debug("Deleted Category: {}", category);
+                });
+    }
+
+    private boolean isAncestors(ObjectId id) {
+        CompletableFuture<List<Category>> allByAncestors = categoryRepository.findAllByAncestors(id);
+        try {
+            List<Category> categoryList = allByAncestors.get();
+            if (categoryList.size() == 0)
+                return true;
+            else
+                throw new CategoryCanNotDeletedException();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

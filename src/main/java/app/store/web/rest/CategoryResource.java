@@ -68,6 +68,16 @@ public class CategoryResource {
                 .body(subCategory.get());
     }
 
+    //root
+    @GetMapping("/category/root")
+    public ResponseEntity<List<CategoryDto>> getRootCategories() {
+        log.debug("REST request to get all root Categories");
+        Optional<List<CategoryDto>> subCategory = categoryService.getRootCategories();
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createAlert("root.categories.get", "isLogin or "))
+                .body(subCategory.get());
+    }
+
 
     @PutMapping("/category/{id}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @Valid @PathVariable String id) {
@@ -82,5 +92,13 @@ public class CategoryResource {
                     HeaderUtil.createAlert("categoryManagement.updated", categoryDto.getName()));
         }
     }
+
+    @DeleteMapping("/category/{id}")
+    public ResponseEntity<Void> deleteCategory(@Valid @PathVariable String id) {
+        log.debug("REST request to delete Category : {}", id);
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("category.deleted", id)).build();
+    }
+
 
 }
