@@ -28,6 +28,8 @@ public class Order implements Serializable {
     @Field
     private Payment payment;
     @Field
+    private Invoice invoice;
+    @Field
     private List<Product> productList;
 
     @Field

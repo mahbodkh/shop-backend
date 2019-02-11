@@ -2,6 +2,7 @@ package app.store.service.dto;
 
 public class ShippingDto {
 
+    private String id;
     private String name;
     private String fullAddress;
     private String phone;
@@ -13,6 +14,14 @@ public class ShippingDto {
     private String latitude;
 
     public ShippingDto() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

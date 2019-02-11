@@ -12,14 +12,17 @@ import app.store.service.util.RandomUtil;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
 public class UserService {
@@ -162,7 +165,14 @@ public class UserService {
 //    List<GrantedAuthority> authorities = user.getAuthorities().stream().map(role ->
 //            new SimpleGrantedAuthority(role.getName())
 //    ).collect(Collectors.toList());
-//
 
 
+    public List<String> getAuthorities() {
+        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    }
+
+
+    public Page<UserDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toDto);
+    }
 }

@@ -4,7 +4,8 @@ public class KeywordDto {
 
     private String id;
     private String name;
-    private DescriptionDto descriptionDto;
+    private String language;
+    private String description;
 
     public KeywordDto() {
     }
@@ -25,11 +26,19 @@ public class KeywordDto {
         this.name = name;
     }
 
-    public DescriptionDto getDescriptionDto() {
-        return descriptionDto;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setDescriptionDto(DescriptionDto descriptionDto) {
-        this.descriptionDto = descriptionDto;
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

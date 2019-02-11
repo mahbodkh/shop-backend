@@ -1,10 +1,14 @@
 package app.store.persistence.domain;
 
+import org.bson.types.ObjectId;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Shipping implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private ObjectId id;
     private String name;
     private String fullAddress;
     private String phone;
@@ -14,6 +18,22 @@ public class Shipping implements Serializable {
     private String province;
     private String longitude;
     private String latitude;
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getName() {
         return name;
@@ -77,6 +97,19 @@ public class Shipping implements Serializable {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shipping shipping = (Shipping) o;
+        return Objects.equals(id, shipping.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

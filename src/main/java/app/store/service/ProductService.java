@@ -2,6 +2,8 @@ package app.store.service;
 
 import app.store.persistence.domain.*;
 import app.store.persistence.domain.enums.AssetType;
+import app.store.persistence.repository.CategoryRepository;
+import app.store.persistence.repository.KeywordRepository;
 import app.store.persistence.repository.ProductRepository;
 import app.store.service.dto.*;
 import app.store.service.mapper.ProductMapper;
@@ -10,6 +12,8 @@ import app.store.web.rest.error.ProductNotFoundException;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,14 +27,16 @@ public class ProductService {
     private final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
-    private final CategoryService categoryService;
+    private final KeywordRepository keywordRepository;
+    private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
 
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, KeywordRepository keywordRepository, CategoryRepository categoryRepository, ProductMapper productMapper) {
 
         this.productRepository = productRepository;
-        this.categoryService = categoryService;
+        this.keywordRepository = keywordRepository;
+        this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
     }
 
@@ -68,8 +74,14 @@ public class ProductService {
 
     public String createProduct(ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
-        categoryService.isValid(product.getCategories());
+        isValidByCategoriesId(product.getCategories());
+        if (product.getKeywords() != null)
+            keywordPersistence(product.getKeywords());
         return productRepository.save(product).getId().toString();
+    }
+
+    private void keywordPersistence(List<Keyword> keywords) {
+        keywordRepository.saveAll(keywords);
     }
 
     public Optional<ProductDto> updateProduct(ProductDto productDto, String id) {
@@ -86,11 +98,11 @@ public class ProductService {
                     //categories
                     List<String> categories = productDto.getCategories();
                     List<ObjectId> categoriesObjectId = new ArrayList<>();
-                    for (String catId : categories) {
-                        if (categoryService.isExists(catId))
+                    categories.forEach(catId -> {
+                        if (categoryRepository.existsById(new ObjectId(catId)))
                             categoriesObjectId.add(new ObjectId(catId));
                         else throw new CategoryNotFoundException();
-                    }
+                    });
                     product.setCategories(categoriesObjectId);
 
                     //description
@@ -189,11 +201,17 @@ public class ProductService {
                             if (keywordDto.getId() != null && !keywordDto.getId().equals(""))
                                 keyword.setId(new ObjectId(keywordDto.getId()));
                             keyword.setName(keywordDto.getName());
-                            if (keywordDto.getDescriptionDto() != null)
-                                keyword.setDescription(getDescription(keywordDto.getDescriptionDto()));
+                            keyword.setLanguage(keywordDto.getLanguage());
+                            keyword.setDescription(keywordDto.getDescription());
                             keywordProduct.add(keyword);
+                            //TODO save Keyword Separately
+                            keywordRepository.save(keyword);
+
                         });
+
                         product.setKeywords(keywordProduct);
+
+
                     }
 
                     //price
@@ -210,9 +228,16 @@ public class ProductService {
                     }
                     //
                     log.debug("Changed Information for Product: {}", product);
-                    productRepository.save(product);
-                    return productMapper.toDto(product);
-                });
+                    return productRepository.save(product);
+                }).map(productMapper::toDto);
+    }
+
+
+    public Optional<ProductDto> getProduct(String id) {
+        return Optional.of(productRepository.findOneById(new ObjectId(id)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(productMapper::toDto);
     }
 
     private Description getDescription(DescriptionDto DescriptionDto) {
@@ -224,15 +249,36 @@ public class ProductService {
         return description;
     }
 
-    public Optional<ProductDto> getProduct(String id) {
-        return Optional.of(productRepository.findOneById(new ObjectId(id)))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(productMapper::toDto);
+    private void isValidByCategoriesId(List<ObjectId> categories) {
+        if (categories != null) {
+            for (ObjectId id : categories) {
+                if (!categoryRepository.existsById(id))
+                    throw new CategoryNotFoundException();
+            }
+        }
     }
 
-    public List<Product> getAllProductByCategoryId() {
-        return null;
+    public void deleteProduct(String id) {
+        productRepository.findOneById(new ObjectId(id)).ifPresent(product -> {
+            productRepository.delete(product);
+            log.debug("Deleted Product: {}", product);
+        });
+    }
+
+    public Optional<List<ProductDto>> getProductsWithKeywordName(String name) {
+        CompletableFuture<List<Product>> allByKeywords = productRepository.findAllByKeywordsName(name);
+        try {
+            List<Product> products = allByKeywords.get();
+            return Optional.of(productMapper.toDto(products));
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    public Page<ProductDto> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(productMapper::toDto);
     }
 
 }

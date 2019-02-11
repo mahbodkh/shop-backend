@@ -6,9 +6,13 @@ import app.store.web.rest.error.BadRequestAlertException;
 import app.store.web.rest.error.CategoryAlreadyUsedException;
 import app.store.web.rest.error.CategoryNotFoundException;
 import app.store.web.rest.util.HeaderUtil;
-import app.store.web.rest.util.ResponseUtil;
+import app.store.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +84,7 @@ public class CategoryResource {
 
 
     @PutMapping("/category/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @Valid @PathVariable String id) {
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @Valid @PathVariable String id) throws URISyntaxException {
         log.debug("REST request to update User : {} with id : {}", categoryDto, id);
         if (id == null)
             throw new BadRequestAlertException("Category ID is null", "CategoryDto", "updateCategory");
@@ -88,8 +92,9 @@ public class CategoryResource {
             throw new CategoryNotFoundException();
         else {
             Optional<CategoryDto> result = categoryService.updateCategory(categoryDto, id);
-            return ResponseUtil.wrapOrNotFound(result,
-                    HeaderUtil.createAlert("categoryManagement.updated", categoryDto.getName()));
+            return ResponseEntity.created(new URI("/api/category/" + result))
+                    .headers(HeaderUtil.createAlert("category.created", ""))
+                    .body(result.get());
         }
     }
 
@@ -100,5 +105,11 @@ public class CategoryResource {
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("category.deleted", id)).build();
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryDto>> getAllCategories(Pageable pageable) {
+        final Page<CategoryDto> page = categoryService.getAllCategories(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 
 }

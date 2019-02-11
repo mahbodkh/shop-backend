@@ -13,6 +13,7 @@ public class OrderDto {
     private Instant checkout;
     private TrackingDto trackingDto;
     private PaymentDto paymentDto;
+    private InvoiceDto invoiceDto;
     private List<ProductDto> productDtoList;
 
 
@@ -58,6 +59,14 @@ public class OrderDto {
 
     public List<ProductDto> getProductDtoList() {
         return productDtoList;
+    }
+
+    public InvoiceDto getInvoiceDto() {
+        return invoiceDto;
+    }
+
+    public void setInvoiceDto(InvoiceDto invoiceDto) {
+        this.invoiceDto = invoiceDto;
     }
 
     public void setProductDtoList(List<ProductDto> productDtoList) {

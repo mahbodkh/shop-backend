@@ -11,6 +11,9 @@ import app.store.web.rest.error.CategoryNotFoundException;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,14 +73,6 @@ public class CategoryService {
         }
     }
 
-    public void isValid(List<ObjectId> categories) {
-        if (categories != null) {
-            for (ObjectId id : categories) {
-                if (!categoryRepository.existsById(id))
-                    throw new CategoryNotFoundException();
-            }
-        }
-    }
 
     public Optional<CategoryDto> getCategory(String id) {
         Optional<Category> category = categoryRepository.findById(new ObjectId(id));
@@ -180,5 +175,11 @@ public class CategoryService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Page<CategoryDto> getAllCategories(Pageable pageable) {
+        Page<Category> allBy = categoryRepository.findAllBy(pageable);
+        List<CategoryDto> categoryDtos = categoryMapper.toDto(allBy.getContent());
+        return new PageImpl<CategoryDto>(categoryDtos);
     }
 }

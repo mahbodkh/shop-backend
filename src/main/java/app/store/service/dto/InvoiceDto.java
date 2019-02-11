@@ -8,6 +8,8 @@ public class InvoiceDto {
     public InvoiceDto() {
     }
 
+    private String id;
+
     @Size(min = 1)
     private Double discount;
 
@@ -16,6 +18,14 @@ public class InvoiceDto {
 
     @Size(min = 1)
     private Double amount;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Double getDiscount() {
         return discount;
