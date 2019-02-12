@@ -28,10 +28,13 @@ public class KeywordService {
     }
 
 
-    public String createKeyword(KeywordDto keywordDto) {
-        Keyword keyword = keywordMapper.toEntity(keywordDto);
-        log.debug("Save Information for Keyword: {}", keywordDto);
-        return keywordRepository.save(keyword).getId().toString();
+    public Optional<String> createKeyword(KeywordDto keywordDto) {
+        return Optional.of(keywordMapper.toEntity(keywordDto))
+                .map(keyword -> {
+                    Keyword save = keywordRepository.save(keyword);
+                    log.debug("Save Information for Keyword: {}", keywordDto);
+                    return save.getId().toString();
+                });
     }
 
     public Optional<KeywordDto> getKeywordByName(String name) {

@@ -46,24 +46,21 @@ public class CartResource {
     public ResponseEntity<String> createCart(@Valid @RequestBody CartDto cartDto) throws URISyntaxException {
         log.debug("REST request to save Cart : {}", cartDto);
         if (cartDto.getUserId() != null) {
-            if (!userService.isExists(cartDto.getUserId())) {
+            if (!userService.isExists(cartDto.getUserId()))
                 throw new UserNotFoundException();
-            }
-            throw new UserNotFoundException();
         } else if (cartDto.getProductIdList() != null) {
             for (String cart : cartDto.getProductIdList()) {
                 if (!productService.isExists(cart))
                     throw new ProductNotFoundException();
             }
-            throw new ProductNotFoundException();
 //        } else if (!cartService.isExists(cartDto)) {
 //            throw new CartNotFoundException();
-        } else {
-            String cartId = cartService.saveCart(cartDto);
-            return ResponseEntity.created(new URI("/api/cart/" + cartId))
-                    .headers(HeaderUtil.createAlert("cart.created", "isLogin or "))
-                    .body(cartId);
         }
+        String cartId = cartService.saveCart(cartDto).get();
+        return ResponseEntity.created(new URI("/api/cart/" + cartId))
+                .headers(HeaderUtil.createAlert("cart.created", "isLogin or "))
+                .body(cartId);
+
     }
 
     @GetMapping("/cart/{id}")

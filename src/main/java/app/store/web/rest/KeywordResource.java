@@ -44,7 +44,7 @@ public class KeywordResource {
     @PostMapping("/keyword")
     public ResponseEntity<String> createKeyword(@Valid @RequestBody KeywordDto keywordDto) throws URISyntaxException {
         log.debug("REST request to save Keyword: {}", keywordDto);
-        String keywordId = keywordService.createKeyword(keywordDto);
+        String keywordId = keywordService.createKeyword(keywordDto).get();
         return ResponseEntity.created(new URI("/api/keyword/" + keywordId))
                 .headers(HeaderUtil.createAlert("keyword.created", ""))
                 .body(keywordId);

@@ -45,18 +45,18 @@ public class UserResource {
             throw new MobileNotFoundException();
         else if (userService.isMobileExists(userDto.getMobile()).isPresent())
             throw new MobileAlreadyUsedException();
-        else if (userDto.getEmail() == null)
-            throw new EmailNotFoundException();
-        else if (userService.isEmailExists(userDto.getEmail()).isPresent())
-            throw new EmailAlreadyUsedException();
-        else {
-            Optional<User> user = userService.createUser(userDto);
-            //todo send email and sms (notification)
+        else if (userDto.getEmail() != null)
+            if (userService.isEmailExists(userDto.getEmail()).isPresent()) {
+                throw new EmailAlreadyUsedException();
+            }
 
-            return ResponseEntity.created(new URI("/api/user/" + user.get().getId()))
-                    .headers(HeaderUtil.createAlert("userManagement.created", user.get().getLogin()))
-                    .build();
-        }
+        UserDto result = userService.createUser(userDto).get();
+        //todo send email and sms (notification)
+
+        return ResponseEntity.created(new URI("/api/user/" + result.getId()))
+                .headers(HeaderUtil.createAlert("userManagement.created", result.getLogin()))
+                .build();
+
     }
 
     @GetMapping("/user/{id}")

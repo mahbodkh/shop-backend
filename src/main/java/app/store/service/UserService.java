@@ -52,11 +52,13 @@ public class UserService {
         return userRepository.findOneByEmailIgnoreCase(email);
     }
 
-    public Optional<User> createUser(UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        return Optional.of(
-                userRepository.save(user)
-        );
+    public Optional<UserDto> createUser(UserDto userDto) {
+        return Optional.of(userMapper.toEntity(userDto))
+                .map(user -> {
+                    User result = userRepository.save(user);
+                    log.debug("Save Information for User: {}", result);
+                    return result;
+                }).map(userMapper::toDto);
     }
 
     public Optional<UserDto> getUserDto(String id) {
@@ -168,11 +170,13 @@ public class UserService {
 
 
     public List<String> getAuthorities() {
-        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+        return authorityRepository.findAll().stream()
+                .map(Authority::getName).collect(Collectors.toList());
     }
 
 
     public Page<UserDto> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(userMapper::toDto);
+        return userRepository.findAll(pageable)
+                .map(userMapper::toDto);
     }
 }

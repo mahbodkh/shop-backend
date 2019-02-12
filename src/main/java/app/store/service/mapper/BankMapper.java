@@ -7,10 +7,4 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {Utils.class})
 public interface BankMapper extends EntityMapper<BankDto, Bank> {
-
-    @Override
-    Bank toEntity(BankDto dto);
-
-    @Override
-    BankDto toDto(Bank entity);
 }

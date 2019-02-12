@@ -3,7 +3,6 @@ package app.store.service.dto;
 import app.store.persistence.domain.Authority;
 import app.store.persistence.domain.User;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
@@ -18,35 +17,27 @@ public class UserDto {
     public UserDto() {
     }
 
+    private String id;
     @NotNull
-    @Size(min = 10, max = 10)
+    //    @Size(min = 10, max = 11)
     private Long mobile;
-
+    private String login;
     @Size(max = 50)
     private String firstName;
-
     @Size(max = 50)
     private String lastName;
-
     private boolean activated = false;
-
-    @Email
+    //    @Email
     @Size(min = 5, max = 254)
     private String email;
-
     @Size(min = 2, max = 6)
     private String gender;
-
     @Size(min = 2, max = 6)
     private String langKey;
-
     @Size(max = 256)
     private String imageUrl;
-
     private String cardNumber;
-
     private List<AddressDto> addresses;
-
     private Set<String> authorities = new HashSet<>();
 
     private Instant lastModifiedDate;
@@ -74,6 +65,13 @@ public class UserDto {
         this.gender = user.getGender();
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Long getMobile() {
         return mobile;
@@ -81,6 +79,14 @@ public class UserDto {
 
     public void setMobile(Long mobile) {
         this.mobile = mobile;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getFirstName() {

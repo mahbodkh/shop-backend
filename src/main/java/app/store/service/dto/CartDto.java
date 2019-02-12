@@ -2,19 +2,27 @@ package app.store.service.dto;
 
 
 import java.util.List;
-import java.util.Set;
 
 public class CartDto {
 
     public CartDto() {
     }
 
+    private String id;
     private String userId;
     private List<String> productIdList;
     private Integer quantity = 0;
     private Double total = 0d;
     private String status;
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUserId() {
         return userId;

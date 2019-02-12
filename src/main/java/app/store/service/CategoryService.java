@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -178,8 +177,7 @@ public class CategoryService {
     }
 
     public Page<CategoryDto> getAllCategories(Pageable pageable) {
-        Page<Category> allBy = categoryRepository.findAllBy(pageable);
-        List<CategoryDto> categoryDtos = categoryMapper.toDto(allBy.getContent());
-        return new PageImpl<CategoryDto>(categoryDtos);
+        return categoryRepository.findAllBy(pageable)
+                .map(categoryMapper::toDto);
     }
 }
