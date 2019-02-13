@@ -38,6 +38,8 @@ public final class ErrorConstants {
 
     public static final URI KEYWORD_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "keyword-not-found");
 
+    public static final URI VENDOR_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "vendor-already-used");
+    public static final URI VENDOR_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "vendor-not-found");
 
     private ErrorConstants() {
     }

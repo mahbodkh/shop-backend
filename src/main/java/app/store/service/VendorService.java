@@ -9,9 +9,14 @@ import app.store.service.mapper.VendorMapper;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class VendorService {
@@ -76,5 +81,25 @@ public class VendorService {
         description.setShortDescribe(DescriptionDto.getShortDescribe());
         description.setLongDescribe(DescriptionDto.getLongDescribe());
         return description;
+    }
+
+    public Optional<List<VendorDto>> isExistByName(String name) {
+        CompletableFuture<List<Vendor>> allByName = vendorRepository.findAllByName(name);
+        try {
+            List<Vendor> vendors = allByName.get();
+            return Optional.of(vendorMapper.toDto(vendors));
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    public boolean isExistById(String id) {
+        return vendorRepository.existsById(new ObjectId(id));
+    }
+
+    public Page<VendorDto> getAllVendor(Pageable pageable) {
+        return vendorRepository.findAll(pageable)
+                .map(vendorMapper::toDto);
     }
 }

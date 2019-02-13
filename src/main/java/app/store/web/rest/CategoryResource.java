@@ -85,7 +85,7 @@ public class CategoryResource {
 
     @PutMapping("/category/{id}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @Valid @PathVariable String id) throws URISyntaxException {
-        log.debug("REST request to update User : {} with id : {}", categoryDto, id);
+        log.debug("REST request to update Category: {} with id : {}", categoryDto, id);
         if (id == null)
             throw new BadRequestAlertException("Category ID is null", "CategoryDto", "updateCategory");
         else if (categoryDto == null || !categoryService.isExists(id))
@@ -107,8 +107,9 @@ public class CategoryResource {
 
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryDto>> getAllCategories(Pageable pageable) {
+        log.debug("REST request to get all Category by pageable: {}", pageable);
         final Page<CategoryDto> page = categoryService.getAllCategories(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/category/");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

@@ -78,8 +78,7 @@ public class UserService {
 
 
     public Optional<UserDto> updateUser(UserDto userDto, String id) {
-        return Optional.of(userRepository
-                .findById(new ObjectId(id)))
+        return Optional.of(userRepository.findById(new ObjectId(id)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(user -> {
@@ -111,7 +110,6 @@ public class UserService {
                 })
                 .map(UserDto::new);
     }
-
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {

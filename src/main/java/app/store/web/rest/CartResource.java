@@ -98,6 +98,7 @@ public class CartResource {
 
     @GetMapping("/carts/{id}")
     public ResponseEntity<List<CartDto>> getAllCards(@Valid @PathVariable String id, @Valid @RequestBody Pageable pageable) {
+        log.debug("REST request to get all Card by pageable: {}", pageable);
         final Page<CartDto> page = cartService.getAllCart(id, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

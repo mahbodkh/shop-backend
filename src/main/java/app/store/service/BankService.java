@@ -71,7 +71,7 @@ public class BankService {
                 });
     }
 
-    public List<BankDto> getAll() {
+    public List<BankDto> getAllBank() {
         List<Bank> all = bankRepository.findAll();
         return bankMapper.toDto(all);
     }

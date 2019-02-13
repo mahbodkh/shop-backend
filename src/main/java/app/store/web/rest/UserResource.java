@@ -56,7 +56,6 @@ public class UserResource {
         return ResponseEntity.created(new URI("/api/user/" + result.getId()))
                 .headers(HeaderUtil.createAlert("userManagement.created", result.getLogin()))
                 .build();
-
     }
 
     @GetMapping("/user/{id}")
@@ -69,12 +68,12 @@ public class UserResource {
 
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<UserDto> updateCart(@Valid @RequestBody UserDto userDto, @Valid @PathVariable String id) {
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @Valid @PathVariable String id) {
         log.debug("REST request to update User : {} with id : {}", userDto, id);
         if (id == null)
             throw new BadRequestAlertException("User ID is null", "UserDto", "updateUser");
         else if (userDto == null || !userService.isExists(id))
-            throw new CartNotFoundException();
+            throw new UserNotFoundException();
         else {
             Optional<UserDto> result = userService.updateUser(userDto, id);
             UserDto existingUser = result.get();
@@ -99,6 +98,7 @@ public class UserResource {
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers(Pageable pageable) {
+        log.debug("REST request to get all User by pageable: {}", pageable);
         final Page<UserDto> page = userService.getAllUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
