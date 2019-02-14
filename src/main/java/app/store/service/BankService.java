@@ -7,9 +7,10 @@ import app.store.service.mapper.BankMapper;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,9 +72,19 @@ public class BankService {
                 });
     }
 
-    public List<BankDto> getAllBank() {
-        List<Bank> all = bankRepository.findAll();
-        return bankMapper.toDto(all);
+    public Page<BankDto> getAllBank(Pageable pageable) {
+        return bankRepository.findAll(pageable)
+                .map(bankMapper::toDto);
+    }
+
+
+    public boolean isExistByName(String name) {
+        return bankRepository.findBankByName(name)
+                .isPresent();
+    }
+
+    public boolean isExistById(String id) {
+        return bankRepository.existsById(new ObjectId(id));
     }
 
 

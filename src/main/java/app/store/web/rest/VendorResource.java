@@ -66,7 +66,6 @@ public class VendorResource {
         return ResponseEntity.created(new URI("/api/vendor/" + result.getId()))
                 .headers(HeaderUtil.createAlert("vendor.created", ""))
                 .body(result);
-
     }
 
     @DeleteMapping("/vendor/{id}")

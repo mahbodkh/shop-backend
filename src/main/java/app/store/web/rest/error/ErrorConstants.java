@@ -41,6 +41,10 @@ public final class ErrorConstants {
     public static final URI VENDOR_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "vendor-already-used");
     public static final URI VENDOR_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "vendor-not-found");
 
+    public static final URI BANK_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "bank-already-used");
+    public static final URI BANK_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "bank-not-found");
+
+
     private ErrorConstants() {
     }
 }
