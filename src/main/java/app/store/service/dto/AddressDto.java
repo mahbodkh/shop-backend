@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 public class AddressDto {
 
     public AddressDto() {
@@ -15,7 +17,7 @@ public class AddressDto {
     private String latitude;
 
     public String getName() {
-        return name;
+        return TextHelper.toStandardPersian(name);
     }
 
     public void setName(String name) {
@@ -23,7 +25,7 @@ public class AddressDto {
     }
 
     public String getFullAddress() {
-        return fullAddress;
+        return TextHelper.toStandardPersian(fullAddress);
     }
 
     public void setFullAddress(String fullAddress) {
@@ -31,7 +33,7 @@ public class AddressDto {
     }
 
     public String getZone() {
-        return zone;
+        return TextHelper.toStandardPersian(zone);
     }
 
     public void setZone(String zone) {
@@ -39,7 +41,7 @@ public class AddressDto {
     }
 
     public String getCity() {
-        return city;
+        return TextHelper.toStandardPersian(city);
     }
 
     public void setCity(String city) {
@@ -55,7 +57,7 @@ public class AddressDto {
     }
 
     public String getProvince() {
-        return province;
+        return TextHelper.toStandardPersian(province);
     }
 
     public void setProvince(String province) {

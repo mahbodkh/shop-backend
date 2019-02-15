@@ -30,7 +30,6 @@ public class UserResource {
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
     private final UserService userService;
-
     private final UserRepository userRepository;
 
     public UserResource(UserService userService, UserRepository userRepository) {

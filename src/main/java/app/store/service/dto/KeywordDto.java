@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 public class KeywordDto {
 
     private String id;
@@ -11,7 +13,7 @@ public class KeywordDto {
     }
 
     public String getId() {
-        return id;
+        return TextHelper.toStandardPersian(id);
     }
 
     public void setId(String id) {
@@ -19,7 +21,7 @@ public class KeywordDto {
     }
 
     public String getName() {
-        return name;
+        return TextHelper.toStandardPersian(name);
     }
 
     public void setName(String name) {
@@ -27,7 +29,7 @@ public class KeywordDto {
     }
 
     public String getLanguage() {
-        return language;
+        return TextHelper.toStandardPersian(language);
     }
 
     public void setLanguage(String language) {
@@ -35,7 +37,7 @@ public class KeywordDto {
     }
 
     public String getDescription() {
-        return description;
+        return TextHelper.toStandardPersian(description);
     }
 
     public void setDescription(String description) {

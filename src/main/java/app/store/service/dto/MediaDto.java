@@ -1,6 +1,7 @@
 package app.store.service.dto;
 
 import app.store.service.dto.enums.AssetTypeDto;
+import app.store.service.util.TextHelper;
 
 public class MediaDto {
 
@@ -33,7 +34,7 @@ public class MediaDto {
     }
 
     public String getName() {
-        return name;
+        return TextHelper.toStandardPersian(name);
     }
 
     public void setName(String name) {

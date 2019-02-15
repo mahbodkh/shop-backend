@@ -40,7 +40,6 @@ public class VendorService {
                 });
     }
 
-
     public Optional<VendorDto> getVendor(String id) {
         log.debug("Get vendor by id: {} ", id);
         return Optional.of(vendorRepository.findOneById(new ObjectId(id)))

@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class ProductDto {
     }
 
     public String getTitle() {
-        return title;
+        return TextHelper.toStandardPersian(title);
     }
 
     public void setTitle(String title) {

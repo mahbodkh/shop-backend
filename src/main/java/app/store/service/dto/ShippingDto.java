@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 public class ShippingDto {
 
     private String id;
@@ -25,7 +27,7 @@ public class ShippingDto {
     }
 
     public String getName() {
-        return name;
+        return TextHelper.toStandardPersian(name);
     }
 
     public void setName(String name) {
@@ -33,7 +35,7 @@ public class ShippingDto {
     }
 
     public String getFullAddress() {
-        return fullAddress;
+        return TextHelper.toStandardPersian(fullAddress);
     }
 
     public void setFullAddress(String fullAddress) {
@@ -57,7 +59,7 @@ public class ShippingDto {
     }
 
     public String getCity() {
-        return city;
+        return TextHelper.toStandardPersian(city);
     }
 
     public void setCity(String city) {
@@ -73,7 +75,7 @@ public class ShippingDto {
     }
 
     public String getProvince() {
-        return province;
+        return TextHelper.toStandardPersian(province);
     }
 
     public void setProvince(String province) {

@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class CategoryDto {
     }
 
     public String getName() {
-        return name;
+        return TextHelper.toStandardPersian(name);
     }
 
     public void setName(String name) {
@@ -35,7 +37,7 @@ public class CategoryDto {
     }
 
     public String getDescription() {
-        return description;
+        return TextHelper.toStandardPersian(description);
     }
 
     public void setDescription(String description) {

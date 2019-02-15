@@ -2,6 +2,7 @@ package app.store.service.dto;
 
 import app.store.persistence.domain.Authority;
 import app.store.persistence.domain.User;
+import app.store.service.util.TextHelper;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -90,7 +91,7 @@ public class UserDto {
     }
 
     public String getFirstName() {
-        return firstName;
+        return TextHelper.toStandardPersian(firstName);
     }
 
     public void setFirstName(String firstName) {
@@ -98,7 +99,7 @@ public class UserDto {
     }
 
     public String getLastName() {
-        return lastName;
+        return TextHelper.toStandardPersian(lastName);
     }
 
     public void setLastName(String lastName) {

@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 public class VariantDto {
 
     private String specType;
@@ -18,7 +20,7 @@ public class VariantDto {
     }
 
     public String getTitle() {
-        return title;
+        return TextHelper.toStandardPersian(title);
     }
 
     public void setTitle(String title) {
