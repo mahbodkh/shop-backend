@@ -13,4 +13,6 @@ public interface CartRepository extends MongoRepository<Cart, ObjectId> {
 
     Page<Cart> findAllByUserIdAndStatus(Pageable pageable, ObjectId userId, CartStatus status);
 
+
+
 }

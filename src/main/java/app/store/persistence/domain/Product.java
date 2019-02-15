@@ -3,7 +3,7 @@ package app.store.persistence.domain;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
@@ -17,8 +17,8 @@ public class Product extends AbstractAuditingEntity implements Serializable {
 
     @Id
     private ObjectId id;
+    @TextIndexed
     @Field
-    @Indexed
     private String title;
     @Field
     List<Description> descriptions = new ArrayList<>();

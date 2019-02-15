@@ -6,11 +6,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@org.springframework.data.mongodb.core.mapping.Document(collection = "order")
-public class Order implements Serializable {
+@org.springframework.data.mongodb.core.mapping.Document(collection = "orderCustomer")
+public class OrderCustomer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Field
@@ -30,14 +31,14 @@ public class Order implements Serializable {
     @Field
     private Invoice invoice;
     @Field
-    private List<Product> productList;
+    private List<Product> productList = new ArrayList<>();
 
     @Field
     private Price price;
 
     @Field
     @Size(min = 1)
-    private Double tax;
+    private Double tax = 1d;
 
     public ObjectId getId() {
         return id;
@@ -95,6 +96,14 @@ public class Order implements Serializable {
         this.payment = payment;
     }
 
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
     public List<Product> getProductList() {
         return productList;
     }
@@ -103,12 +112,28 @@ public class Order implements Serializable {
         this.productList = productList;
     }
 
+    public Price getPrice() {
+        return price;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
+    public Double getTax() {
+        return tax;
+    }
+
+    public void setTax(Double tax) {
+        this.tax = tax;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return Objects.equals(id, order.id);
+        OrderCustomer orderCustomer = (OrderCustomer) o;
+        return Objects.equals(id, orderCustomer.id);
     }
 
     @Override
@@ -118,7 +143,7 @@ public class Order implements Serializable {
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderCustomer{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", shipping=" + shipping +
@@ -126,7 +151,10 @@ public class Order implements Serializable {
                 ", checkout=" + checkout +
                 ", tracking=" + tracking +
                 ", payment=" + payment +
+                ", invoice=" + invoice +
                 ", productList=" + productList +
+                ", price=" + price +
+                ", tax=" + tax +
                 '}';
     }
 }

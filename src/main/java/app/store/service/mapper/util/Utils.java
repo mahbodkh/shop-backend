@@ -6,6 +6,9 @@ import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Mapper
 public class Utils {

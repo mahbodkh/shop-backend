@@ -1,6 +1,9 @@
 package app.store.service.dto;
 
 
+import app.store.service.dto.enums.CartStatusDto;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartDto {
@@ -10,10 +13,10 @@ public class CartDto {
 
     private String id;
     private String userId;
-    private List<String> productIdList;
+    private List<ProductCartDto> productCarts = new ArrayList<>();
     private Integer quantity = 0;
     private Double total = 0d;
-    private String status;
+    private CartStatusDto status;
 
 
     public String getId() {
@@ -32,12 +35,12 @@ public class CartDto {
         this.userId = userId;
     }
 
-    public List<String> getProductIdList() {
-        return productIdList;
+    public List<ProductCartDto> getProductCarts() {
+        return productCarts;
     }
 
-    public void setProductIdList(List<String> productIdList) {
-        this.productIdList = productIdList;
+    public void setProductCarts(List<ProductCartDto> productCarts) {
+        this.productCarts = productCarts;
     }
 
     public Integer getQuantity() {
@@ -56,12 +59,11 @@ public class CartDto {
         this.total = total;
     }
 
-    public String getStatus() {
+    public CartStatusDto getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CartStatusDto status) {
         this.status = status;
     }
-
 }

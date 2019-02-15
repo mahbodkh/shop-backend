@@ -1,17 +1,18 @@
 package app.store.persistence.domain;
 
 import app.store.persistence.domain.enums.CartStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "cart")
 public class Cart extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -19,10 +20,11 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
     @Field
     private ObjectId userId;
     @Field
-    private List<ObjectId> productIdList;
+    private List<ProductCart> productCarts = new ArrayList<>();
     @Field
     private Integer quantity = 0;
     @Field
+    @JsonIgnore
     private Double total = 0d;
     @Field
     private CartStatus status;
@@ -44,12 +46,12 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
         this.userId = userId;
     }
 
-    public List<ObjectId> getProductIdList() {
-        return productIdList;
+    public List<ProductCart> getProductCarts() {
+        return productCarts;
     }
 
-    public void setProductIdList(List<ObjectId> productIdList) {
-        this.productIdList = productIdList;
+    public void setProductCarts(List<ProductCart> productCarts) {
+        this.productCarts = productCarts;
     }
 
     public Integer getQuantity() {
@@ -94,7 +96,7 @@ public class Cart extends AbstractAuditingEntity implements Serializable {
         return "Cart{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", productIdList=" + productIdList +
+                ", productCarts=" + productCarts +
                 ", quantity=" + quantity +
                 ", total=" + total +
                 ", status=" + status +

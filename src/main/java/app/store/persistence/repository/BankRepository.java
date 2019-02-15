@@ -15,6 +15,4 @@ public interface BankRepository extends MongoRepository<Bank, ObjectId> {
 
     Optional<Bank> findBankByName(String name);
 
-    @Async
-    CompletableFuture<List<Bank>> getAllBy();
 }
