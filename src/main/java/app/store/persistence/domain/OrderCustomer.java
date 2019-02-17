@@ -31,7 +31,7 @@ public class OrderCustomer implements Serializable {
     @Field
     private Invoice invoice;
     @Field
-    private List<Product> productList = new ArrayList<>();
+    private List<ObjectId> productList = new ArrayList<>();
 
     @Field
     private Price price;
@@ -104,11 +104,11 @@ public class OrderCustomer implements Serializable {
         this.invoice = invoice;
     }
 
-    public List<Product> getProductList() {
+    public List<ObjectId> getProductList() {
         return productList;
     }
 
-    public void setProductList(List<Product> productList) {
+    public void setProductList(List<ObjectId> productList) {
         this.productList = productList;
     }
 

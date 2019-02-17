@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +26,9 @@ public interface CategoryRepository extends MongoRepository<Category, ObjectId> 
 
     @Async
     CompletableFuture<List<Category>> findAllByAncestors(ObjectId id);
+
+    @Async
+    @Query(value = "{ $text: { $search: ?0 } }")
+    CompletableFuture<List<Category>> findTextSearch(String value);
 
 }

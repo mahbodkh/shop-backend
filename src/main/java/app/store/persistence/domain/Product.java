@@ -17,9 +17,10 @@ public class Product extends AbstractAuditingEntity implements Serializable {
 
     @Id
     private ObjectId id;
-    @TextIndexed
+    @TextIndexed(weight = 1)
     @Field
     private String title;
+    @TextIndexed(weight = 1)
     @Field
     List<Description> descriptions = new ArrayList<>();
     @Field
@@ -44,6 +45,7 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     private List<Variant> variants = new ArrayList<>();
     @Field
     private List<ObjectId> relateProduct = new ArrayList<>();
+    @TextIndexed(weight = 2)
     @Field
     private List<Keyword> keywords = new ArrayList<>();
 

@@ -3,12 +3,14 @@ package app.store.persistence.domain;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "category")
 public class Category extends AbstractAuditingEntity implements Serializable {
@@ -18,10 +20,11 @@ public class Category extends AbstractAuditingEntity implements Serializable {
     @Id
     private ObjectId id;
 
-    @Indexed
+    @TextIndexed(weight = 1)
     @Field
     @Size(min = 2, max = 100)
     private String name;
+    @TextIndexed(weight = 1)
     @Field
     @Size(min = 5, max = 2000)
     private String description;
@@ -35,6 +38,7 @@ public class Category extends AbstractAuditingEntity implements Serializable {
     private String cover;           // url of the image
     @Field
     private List<ObjectId> ancestors = new ArrayList<>();
+    @TextIndexed(weight = 2)
     @Field
     private List<String> facets = new ArrayList<>();
 

@@ -180,4 +180,14 @@ public class CategoryService {
         return categoryRepository.findAllBy(pageable)
                 .map(categoryMapper::toDto);
     }
+
+    public Optional<List<CategoryDto>> textSearch(String text) {
+        CompletableFuture<List<Category>> textSearch = categoryRepository.findTextSearch(text);
+        try {
+            return Optional.of(categoryMapper.toDto(textSearch.get()));
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
 }

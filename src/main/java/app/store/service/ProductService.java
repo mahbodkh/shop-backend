@@ -281,4 +281,14 @@ public class ProductService {
                 .map(productMapper::toDto);
     }
 
+    public Optional<List<ProductDto>> textSearch(String text) {
+        CompletableFuture<List<Product>> allBy = productRepository.findTextSearch(text);
+        try {
+            return Optional.of(productMapper.toDto(allBy.get()));
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
 }

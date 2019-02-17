@@ -5,11 +5,11 @@ import app.store.service.dto.ProductDto;
 import app.store.service.mapper.util.Utils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring", uses = {Utils.class})
 public interface ProductMapper extends EntityMapper<ProductDto, Product> {
     @Override
+    @Mapping(target = "sold", ignore = true)
     Product toEntity(ProductDto dto);
 
     @Override
