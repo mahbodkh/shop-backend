@@ -1,6 +1,7 @@
 package app.store.service.dto;
 
 import app.store.service.util.TextHelper;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ProductDto {
     private List<VariantDto> variants = new ArrayList<>();
     private List<String> relateProduct = new ArrayList<>();
     private List<KeywordDto> keywords = new ArrayList<>();
+
 
     public String getId() {
         return id;

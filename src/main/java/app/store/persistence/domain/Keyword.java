@@ -12,16 +12,12 @@ import java.util.Objects;
 public class Keyword implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     @Id
     private ObjectId id;
-
     @Field
     private String language;
-
     @Field
     private String name;
-
     @Field
     private String description;
 

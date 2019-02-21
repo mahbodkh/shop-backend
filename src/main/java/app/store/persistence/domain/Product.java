@@ -22,7 +22,7 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     private String title;
     @TextIndexed(weight = 1)
     @Field
-    List<Description> descriptions = new ArrayList<>();
+    private List<Description> descriptions = new ArrayList<>();
     @Field
     private String categoryPath;
     @Field
@@ -41,6 +41,7 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     private Dimension dimension;
     @Field
     private List<Media> mediaList = new ArrayList<>();
+    @TextIndexed(weight = 2)
     @Field
     private List<Variant> variants = new ArrayList<>();
     @Field

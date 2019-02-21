@@ -15,19 +15,14 @@ public class Payment implements Serializable {
 
     @Id
     private ObjectId id;
-
     @Field
     private ObjectId cartId;
-
     @Field
     private ObjectId bankId;
-
     @Field
     private Double amount = 0d;
-
     @Field
     private Instant transaction;
-
     @Field
     private String method;
 

@@ -2,9 +2,7 @@ package app.store.persistence.domain;
 
 
 import app.store.persistence.domain.enums.AssetType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,9 +18,6 @@ public class Media implements Serializable {
     private Double width;
     private Double height;
     private Double duration;
-
-    @JsonIgnore
-    private MultipartFile data;
 
 
     public ObjectId getId() {
@@ -87,14 +82,6 @@ public class Media implements Serializable {
 
     public void setDuration(Double duration) {
         this.duration = duration;
-    }
-
-    public MultipartFile getData() {
-        return data;
-    }
-
-    public void setData(MultipartFile data) {
-        this.data = data;
     }
 
     @Override

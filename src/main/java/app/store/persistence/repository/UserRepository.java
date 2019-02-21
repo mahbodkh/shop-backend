@@ -30,4 +30,6 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
     Optional<User> findOneByMobile(Long mobile);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
+
+    Optional<User> findByLogin(String username);
 }

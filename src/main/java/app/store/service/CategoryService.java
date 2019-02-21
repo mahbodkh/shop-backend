@@ -190,4 +190,11 @@ public class CategoryService {
         }
         return Optional.empty();
     }
+
+
+//    public List<Category> getCategoriesFullText(String text) {
+//        return categoryRepository.getAllBy(text);
+//    }
+
+
 }

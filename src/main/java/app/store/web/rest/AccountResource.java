@@ -3,6 +3,8 @@ package app.store.web.rest;
 import app.store.persistence.domain.User;
 import app.store.persistence.repository.UserRepository;
 import app.store.secority.SecurityUtils;
+import app.store.secority.jwt.JWTConfigurer;
+import app.store.secority.jwt.JwtTokenProvider;
 import app.store.service.MailService;
 import app.store.service.SmsService;
 import app.store.service.UserService;
@@ -10,11 +12,19 @@ import app.store.service.dto.PasswordChangeDto;
 import app.store.service.dto.UserDto;
 import app.store.web.rest.error.*;
 import app.store.web.rest.vm.KeyAndPasswordVM;
+import app.store.web.rest.vm.LoginVM;
 import app.store.web.rest.vm.ManagedUserVM;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,13 +41,18 @@ public class AccountResource {
     private final UserService userService;
     private final MailService mailService;
     private final SmsService smsService;
+    private final JwtTokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, SmsService smsService) {
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, SmsService smsService, JwtTokenProvider tokenProvider, AuthenticationManager authenticationManager) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.smsService = smsService;
+        this.tokenProvider = tokenProvider;
+        this.authenticationManager = authenticationManager;
     }
 
 
@@ -131,4 +146,39 @@ public class AccountResource {
                 password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
                 password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
+
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    static class JWTToken {
+
+        private String idToken;
+
+        JWTToken(String idToken) {
+            this.idToken = idToken;
+        }
+
+        @JsonProperty("id_token")
+        String getIdToken() {
+            return idToken;
+        }
+
+        void setIdToken(String idToken) {
+            this.idToken = idToken;
+        }
+    }
+
 }

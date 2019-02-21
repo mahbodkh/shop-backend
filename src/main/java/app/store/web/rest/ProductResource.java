@@ -1,5 +1,6 @@
 package app.store.web.rest;
 
+import app.store.service.FileService;
 import app.store.service.ProductService;
 import app.store.service.dto.ProductDto;
 import app.store.web.rest.error.ProductAlreadyUsedException;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -30,15 +32,17 @@ public class ProductResource {
 
 
     private final ProductService productService;
+    private final FileService fileService;
 
-    public ProductResource(ProductService productService) {
+    public ProductResource(ProductService productService, FileService fileService) {
 
         this.productService = productService;
+        this.fileService = fileService;
     }
 
 
     @PostMapping("/product")
-    public ResponseEntity<String> createProduct(@Valid @RequestBody ProductDto productDto) throws URISyntaxException {
+    public ResponseEntity<String> createProduct(@Valid @RequestBody ProductDto productDto, @Valid @RequestParam("file") MultipartFile[] file) throws URISyntaxException {
         log.debug("REST request to save Product : {}", productDto);
         if (productDto == null) {
             throw new ProductInvalidException();
@@ -46,6 +50,7 @@ public class ProductResource {
             throw new ProductAlreadyUsedException();
         }
         String productId = productService.createProduct(productDto);
+        fileService.uploadProduct(file, productId);
 
         return ResponseEntity.created(new URI("/api/product/" + productId))
                 .headers(HeaderUtil.createAlert("product.created", productId))

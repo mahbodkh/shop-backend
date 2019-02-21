@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import java.io.Serializable;
 import java.util.Objects;
 
+@org.springframework.data.mongodb.core.mapping.Document(collection = "shipping")
 public class Shipping implements Serializable {
     private static final long serialVersionUID = 1L;
 

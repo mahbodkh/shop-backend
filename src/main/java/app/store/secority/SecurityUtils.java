@@ -4,6 +4,10 @@ package app.store.secority;
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.UserDetails;
 
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Optional;
 
 
@@ -18,21 +22,21 @@ public final class SecurityUtils {
      * @return the login of the current user
      */
     public static Optional<String> getCurrentUserLogin() {
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        return Optional.ofNullable(securityContext.getAuthentication())
-//            .map(authentication -> {
-//                if (authentication.getPrincipal() instanceof UserDetails) {
-//                    UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-//                    return springSecurityUser.getUsername();
-//                } else if (authentication.getPrincipal() instanceof String) {
-//                    return (String) authentication.getPrincipal();
-//                }
-//                return null;
-//            });
-        return Optional.empty();
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .map(authentication -> {
+                    if (authentication.getPrincipal() instanceof UserDetails) {
+                        UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                        return springSecurityUser.getUsername();
+                    } else if (authentication.getPrincipal() instanceof String) {
+                        return (String) authentication.getPrincipal();
+                    }
+                    return null;
+                });
     }
 
     public static Optional<Long> getCurrentUserMobile() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
 
         return Optional.empty();
     }
@@ -43,11 +47,10 @@ public final class SecurityUtils {
      * @return the JWT of the current user
      */
     public static Optional<String> getCurrentUserJWT() {
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        return Optional.ofNullable(securityContext.getAuthentication())
-//            .filter(authentication -> authentication.getCredentials() instanceof String)
-//            .map(authentication -> (String) authentication.getCredentials());
-        return Optional.empty();
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .filter(authentication -> authentication.getCredentials() instanceof String)
+                .map(authentication -> (String) authentication.getCredentials());
     }
 
     /**
@@ -56,12 +59,11 @@ public final class SecurityUtils {
      * @return true if the user is authenticated, false otherwise
      */
     public static boolean isAuthenticated() {
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        return Optional.ofNullable(securityContext.getAuthentication())
-//            .map(authentication -> authentication.getAuthorities().stream()
-//                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)))
-//            .orElse(false);
-        return false;
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .map(authentication -> authentication.getAuthorities().stream()
+                        .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)))
+                .orElse(false);
     }
 
     /**
@@ -73,11 +75,10 @@ public final class SecurityUtils {
      * @return true if the current user has the authority, false otherwise
      */
     public static boolean isCurrentUserInRole(String authority) {
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        return Optional.ofNullable(securityContext.getAuthentication())
-//            .map(authentication -> authentication.getAuthorities().stream()
-//                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority)))
-//            .orElse(false);
-        return false;
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                .map(authentication -> authentication.getAuthorities().stream()
+                        .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority)))
+                .orElse(false);
     }
 }

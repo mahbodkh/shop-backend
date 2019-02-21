@@ -32,10 +32,8 @@ public class OrderCustomer implements Serializable {
     private Invoice invoice;
     @Field
     private List<ObjectId> productList = new ArrayList<>();
-
     @Field
     private Price price;
-
     @Field
     @Size(min = 1)
     private Double tax = 1d;

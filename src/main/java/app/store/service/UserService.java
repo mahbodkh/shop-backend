@@ -12,13 +12,17 @@ import app.store.service.dto.AddressDto;
 import app.store.service.dto.UserDto;
 import app.store.service.mapper.UserMapper;
 import app.store.service.util.RandomUtil;
+import app.store.web.rest.error.InvalidPasswordException;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -28,8 +32,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 @Service
 public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
@@ -38,12 +40,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, AuthorityRepository authorityRepository) {
+
+    public UserService(UserRepository userRepository, UserMapper userMapper, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.authorityRepository = authorityRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean isExists(String userId) {
@@ -170,11 +175,11 @@ public class UserService {
                 .flatMap(userRepository::findOneByLogin)
                 .ifPresent(user -> {
                     String currentEncryptedPassword = user.getPassword();
-//                    if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-//                        throw new InvalidPasswordException();
-//                    }
-//                    String encryptedPassword = passwordEncoder.encode(newPassword);
-//                    user.setPassword(encryptedPassword);
+                    if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                        throw new InvalidPasswordException();
+                    }
+                    String encryptedPassword = passwordEncoder.encode(newPassword);
+                    user.setPassword(encryptedPassword);
                     userRepository.save(user);
                     log.debug("Changed password for User: {}", user);
                 });
@@ -186,7 +191,7 @@ public class UserService {
         return userRepository.findOneByResetKey(key)
                 .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
                 .map(user -> {
-//                    user.setPassword(passwordEncoder.encode(newPassword));
+                    user.setPassword(passwordEncoder.encode(newPassword));
                     user.setPassword(newPassword);
                     user.setResetKey(null);
                     user.setResetDate(null);
@@ -195,14 +200,14 @@ public class UserService {
                 });
     }
 
-//    @Transactional
-//    public User loadUserByMobile(String mobile) {
-//        User user = userRepository.findOneByMobile(Long.valueOf(mobile))
-//                .orElseThrow(() ->
-//                        new UsernameNotFoundException("User Not Found with -> mobile or email : " + mobile)
-//                );
-//        return user;
-//    }
+    @Transactional
+    public User loadUserByMobile(String mobile) {
+        User user = userRepository.findOneByMobile(Long.valueOf(mobile))
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User Not Found with -> mobile or email : " + mobile)
+                );
+        return user;
+    }
 
 //    List<GrantedAuthority> authorities = user.getAuthorities().stream().map(role ->
 //            new SimpleGrantedAuthority(role.getName())
@@ -231,14 +236,15 @@ public class UserService {
 
     public User registerUser(UserDto userDto, String password) {
         User newUser = new User();
-//        String encryptedPassword = passwordEncoder.encode(password);
+        String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDto.getLogin());
         // new user gets initially a generated password
-//        newUser.setPassword(encryptedPassword);
+        newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDto.getFirstName());
         newUser.setLastName(userDto.getLastName());
         newUser.setEmail(userDto.getEmail());
         newUser.setImageUrl(userDto.getImageUrl());
+        newUser.setMobile(userDto.getMobile());
         newUser.setLangKey(userDto.getLangKey());
         // new user is not active
         newUser.setActivated(false);

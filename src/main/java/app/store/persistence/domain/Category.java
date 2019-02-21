@@ -16,10 +16,8 @@ import java.util.Objects;
 public class Category extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     @Id
     private ObjectId id;
-
     @TextIndexed(weight = 1)
     @Field
     @Size(min = 2, max = 100)

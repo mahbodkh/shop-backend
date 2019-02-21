@@ -1,5 +1,7 @@
 package app.store.service;
 
+import app.store.persistence.domain.Category;
+import app.store.persistence.domain.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,5 +27,15 @@ public class SearchService {
                 .ifPresent(dtos::add);
         return dtos;
     }
+
+//    public List getSimpleQuery(String value) {
+//        List dtos = new ArrayList();
+//        List<Product> products = productService.getProductFullTextSearch(value);
+//        dtos.add(products);
+////        List<Category> categories = categoryService.getCategoriesFullText(value);
+////        dtos.add(categories);
+//        return dtos;
+//    }
+
 
 }

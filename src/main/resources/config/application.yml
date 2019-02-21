@@ -30,3 +30,10 @@ spring:
     port: 25
     username:
     password:
+
+  servlet:
+    multipart:
+      enabled: false
+      max-file-size: 2MB
+      max-request-size: 10MB
+      location: /opt/

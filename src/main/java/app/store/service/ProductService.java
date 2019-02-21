@@ -80,6 +80,20 @@ public class ProductService {
         return productRepository.save(product).getId().toString();
     }
 
+    protected Optional<Product> createProductAndReturn(ProductDto productDto) {
+        return Optional.of(productMapper.toEntity(productDto))
+                .map(product -> {
+
+
+                    Product result = productRepository.save(product);
+                    log.debug("Save Information for Product: {}", result);
+                    return result;
+                });
+
+
+    }
+
+
     private void keywordPersistence(List<Keyword> keywords) {
         keywordRepository.saveAll(keywords);
     }
@@ -145,10 +159,6 @@ public class ProductService {
                                     Enum.valueOf(AssetType.class, mediaDto.getType().name())
                             );
                             // TODO Upload Multipart Data
-                            if (media.getData() != null) {
-                                //
-                                media.setData(null);
-                            }
 
                             mediaProduct.add(media);
                         });
@@ -219,11 +229,7 @@ public class ProductService {
                         PriceDto priceProductDto = productDto.getPrice();
                         Price priceProduct = new Price();
                         priceProduct.setPrice(priceProductDto.getPrice());
-                        priceProduct.setDiscount(priceProductDto.getDiscount());
-                        priceProduct.setQtyRetail(priceProductDto.getQtyRetail());
-                        priceProduct.setRetail(priceProductDto.getRetail());
-                        priceProduct.setSaleValid(priceProductDto.getSaleValid());
-                        priceProduct.setSaving(priceProductDto.getSaving());
+                        priceProduct.setCurrency("");
                         product.setPrice(priceProduct);
                     }
                     //
@@ -239,6 +245,13 @@ public class ProductService {
                 .map(Optional::get)
                 .map(productMapper::toDto);
     }
+
+    protected Optional<Product> getProductAndReturn(String id) {
+        return Optional.of(productRepository.findOneById(new ObjectId(id)))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
+
 
     private Description getDescription(DescriptionDto DescriptionDto) {
         Description description = new Description();
@@ -289,6 +302,10 @@ public class ProductService {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public List<Product> getProductFullTextSearch(String text) {
+        return productRepository.onTextValueQuery(text);
     }
 
 }

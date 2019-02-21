@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Repository
-public interface ProductRepository extends MongoRepository<Product, ObjectId> {
+public interface ProductRepository extends MongoRepository<Product, ObjectId>, ProductRepositoryCustom {
 
     Optional<Product> findOneById(ObjectId id);
 
@@ -29,5 +29,5 @@ public interface ProductRepository extends MongoRepository<Product, ObjectId> {
     @Query(value = "{ $text: { $search: ?0 } }")
     CompletableFuture<List<Product>> findTextSearch(String value);
 
-
+//    List<Product> onTextValueQuery(String text);
 }
