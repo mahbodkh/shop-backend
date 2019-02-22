@@ -1,6 +1,7 @@
 package app.store.persistence.domain;
 
 
+import app.store.persistence.domain.enums.PaymentMethod;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,7 +17,9 @@ public class Payment implements Serializable {
     @Id
     private ObjectId id;
     @Field
-    private ObjectId cartId;
+    private ObjectId userId;
+    @Field
+    private ObjectId invoiceId;
     @Field
     private ObjectId bankId;
     @Field
@@ -24,7 +27,9 @@ public class Payment implements Serializable {
     @Field
     private Instant transaction;
     @Field
-    private String method;
+    private PaymentMethod method;
+    @Field
+    private Boolean isPaid = false;
 
 
     public ObjectId getId() {
@@ -35,12 +40,20 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public ObjectId getCartId() {
-        return cartId;
+    public ObjectId getUserId() {
+        return userId;
     }
 
-    public void setCartId(ObjectId cartId) {
-        this.cartId = cartId;
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
+    }
+
+    public ObjectId getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(ObjectId invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public ObjectId getBankId() {
@@ -67,12 +80,20 @@ public class Payment implements Serializable {
         this.transaction = transaction;
     }
 
-    public String getMethod() {
+    public PaymentMethod getMethod() {
         return method;
     }
 
-    public void setMethod(String method) {
+    public void setMethod(PaymentMethod method) {
         this.method = method;
+    }
+
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
     }
 
     @Override
@@ -88,15 +109,18 @@ public class Payment implements Serializable {
         return Objects.hash(id);
     }
 
+
     @Override
     public String toString() {
         return "Payment{" +
                 "id=" + id +
-                ", cartId=" + cartId +
+                ", userId=" + userId +
+                ", invoiceId=" + invoiceId +
                 ", bankId=" + bankId +
                 ", amount=" + amount +
                 ", transaction=" + transaction +
                 ", method=" + method +
+                ", isPaid=" + isPaid +
                 '}';
     }
 }
