@@ -1,6 +1,5 @@
 package app.store.persistence.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -18,15 +17,15 @@ public class Bank extends AbstractAuditingEntity implements Serializable {
     private String name;                        // name of the bank , mellat , passargad ,
     @Field
     private String merchant;                    // some banks need merchant id for detect you
-    @JsonIgnore
+    @Field
     private String terminalId;                  // some banks need terminal id for detect you
     @Field
     private String gatewayUrl;                  // the main uri for payment
-    @JsonIgnore
+    @Field
     private String username;                    // the username
-    @JsonIgnore
+    @Field
     private String password;                    // the password
-    @JsonIgnore
+    @Field
     private String mobile;                      // the mobile number of you account
     @Field
     private String gatewayPostfix;              // the main postfix
