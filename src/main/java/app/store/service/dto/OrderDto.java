@@ -1,6 +1,9 @@
 package app.store.service.dto;
 
+import app.store.service.dto.enums.OrderStatusDto;
+
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDto {
@@ -8,29 +11,30 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    private ShippingDto shippingDto;
-    private String deliveryNote;
+    private String id;
+    private String userId;
     private Instant checkout;
-    private TrackingDto trackingDto;
-    private PaymentDto paymentDto;
-    private InvoiceDto invoiceDto;
-    private List<ProductDto> productDtoList;
+    private List<ProductCartDto> productCartDtos = new ArrayList<>();
+    private List<TrackingDto> tracking = new ArrayList<>();
+    private String paymentId;
+    private String invoiceId;
+    private OrderStatusDto status;
+    private ShippingDto shipping;
 
-
-    public ShippingDto getShippingDto() {
-        return shippingDto;
+    public String getId() {
+        return id;
     }
 
-    public void setShippingDto(ShippingDto shippingDto) {
-        this.shippingDto = shippingDto;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getDeliveryNote() {
-        return deliveryNote;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setDeliveryNote(String deliveryNote) {
-        this.deliveryNote = deliveryNote;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Instant getCheckout() {
@@ -41,35 +45,51 @@ public class OrderDto {
         this.checkout = checkout;
     }
 
-    public TrackingDto getTrackingDto() {
-        return trackingDto;
+    public List<ProductCartDto> getProductCartDtos() {
+        return productCartDtos;
     }
 
-    public void setTrackingDto(TrackingDto trackingDto) {
-        this.trackingDto = trackingDto;
+    public void setProductCartDtos(List<ProductCartDto> productCartDtos) {
+        this.productCartDtos = productCartDtos;
     }
 
-    public PaymentDto getPaymentDto() {
-        return paymentDto;
+    public List<TrackingDto> getTracking() {
+        return tracking;
     }
 
-    public void setPaymentDto(PaymentDto paymentDto) {
-        this.paymentDto = paymentDto;
+    public void setTracking(List<TrackingDto> tracking) {
+        this.tracking = tracking;
     }
 
-    public List<ProductDto> getProductDtoList() {
-        return productDtoList;
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    public InvoiceDto getInvoiceDto() {
-        return invoiceDto;
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
-    public void setInvoiceDto(InvoiceDto invoiceDto) {
-        this.invoiceDto = invoiceDto;
+    public String getInvoiceId() {
+        return invoiceId;
     }
 
-    public void setProductDtoList(List<ProductDto> productDtoList) {
-        this.productDtoList = productDtoList;
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public OrderStatusDto getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatusDto status) {
+        this.status = status;
+    }
+
+    public ShippingDto getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(ShippingDto shipping) {
+        this.shipping = shipping;
     }
 }

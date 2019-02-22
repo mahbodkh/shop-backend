@@ -1,45 +1,19 @@
 package app.store.service.dto;
 
+import app.store.service.dto.enums.PaymentMethodDto;
+
 import java.time.Instant;
 
 public class PaymentDto {
     public PaymentDto() {
     }
 
-    private String cartId;
+    private String id;
+    private String  userId;
+    private String invoiceId;
     private String bankId;
     private Double amount = 0d;
     private Instant transaction;
-
-    public String getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(String cartId) {
-        this.cartId = cartId;
-    }
-
-    public String getBankId() {
-        return bankId;
-    }
-
-    public void setBankId(String bankId) {
-        this.bankId = bankId;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public Instant getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Instant transaction) {
-        this.transaction = transaction;
-    }
+    private PaymentMethodDto method;
+    private Boolean isPaid = false;
 }
