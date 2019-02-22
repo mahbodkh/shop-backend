@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
-@org.springframework.data.mongodb.core.mapping.Document(collection = "tracking")
 public class Tracking implements Serializable {
     private static final long serialVersionUID = 1L;
 

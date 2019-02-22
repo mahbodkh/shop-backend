@@ -1,39 +1,24 @@
 package app.store.persistence.domain;
 
-import org.bson.types.ObjectId;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Shipping implements Serializable {
+public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private ObjectId id;
+
+    public Address() {
+    }
+
     private String name;
     private String fullAddress;
-    private String phone;
     private String zone;
     private String city;
     private String zipCode;
     private String province;
     private String longitude;
     private String latitude;
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
     public String getName() {
         return name;
@@ -103,18 +88,25 @@ public class Shipping implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Shipping shipping = (Shipping) o;
-        return Objects.equals(id, shipping.id);
+        Address address = (Address) o;
+        return Objects.equals(name, address.name) &&
+                Objects.equals(fullAddress, address.fullAddress) &&
+                Objects.equals(zone, address.zone) &&
+                Objects.equals(city, address.city) &&
+                Objects.equals(zipCode, address.zipCode) &&
+                Objects.equals(province, address.province) &&
+                Objects.equals(longitude, address.longitude) &&
+                Objects.equals(latitude, address.latitude);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name, fullAddress, zone, city, zipCode, province, longitude, latitude);
     }
 
     @Override
     public String toString() {
-        return "Shipping{" +
+        return "Address{" +
                 "name='" + name + '\'' +
                 ", fullAddress='" + fullAddress + '\'' +
                 ", zone='" + zone + '\'' +

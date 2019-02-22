@@ -11,6 +11,7 @@ public class ProductCart implements Serializable {
     private ObjectId productId;
     private String property;
     private Integer quantity = 0;
+    private Price price;
 
     public ProductCart() {
     }
@@ -39,6 +40,14 @@ public class ProductCart implements Serializable {
         this.quantity = quantity;
     }
 
+    public Price getPrice() {
+        return price;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,6 +69,7 @@ public class ProductCart implements Serializable {
                 "productId=" + productId +
                 ", property='" + property + '\'' +
                 ", quantity=" + quantity +
+                ", price=" + price +
                 '}';
     }
 }

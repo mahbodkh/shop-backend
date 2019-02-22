@@ -8,6 +8,7 @@ public class Price implements Serializable {
 
     private Double price;
     private String currency;
+    private Double discount;
 
     public Double getPrice() {
         return price;
@@ -25,6 +26,13 @@ public class Price implements Serializable {
         this.currency = currency;
     }
 
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -40,11 +48,13 @@ public class Price implements Serializable {
         return Objects.hash(price, currency);
     }
 
+
     @Override
     public String toString() {
         return "Price{" +
                 "price=" + price +
                 ", currency='" + currency + '\'' +
+                ", discount=" + discount +
                 '}';
     }
 }
