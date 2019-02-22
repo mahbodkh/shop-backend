@@ -31,6 +31,69 @@ public class Order implements Serializable {
     @Field
     private Shipping shipping;
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public ObjectId getUserId() {
+        return userId;
+    }
+
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
+    }
+
+    public Instant getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(Instant checkout) {
+        this.checkout = checkout;
+    }
+
+    public List<Tracking> getTracking() {
+        return tracking;
+    }
+
+    public void setTracking(List<Tracking> tracking) {
+        this.tracking = tracking;
+    }
+
+    public ObjectId getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(ObjectId paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public ObjectId getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(ObjectId invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public Shipping getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(Shipping shipping) {
+        this.shipping = shipping;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -45,6 +108,17 @@ public class Order implements Serializable {
         return Objects.hash(id);
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", checkout=" + checkout +
+                ", tracking=" + tracking +
+                ", paymentId=" + paymentId +
+                ", invoiceId=" + invoiceId +
+                ", status=" + status +
+                ", shipping=" + shipping +
+                '}';
+    }
 }
