@@ -2,6 +2,7 @@ package app.store.web.rest;
 
 import app.store.persistence.domain.User;
 import app.store.persistence.repository.UserRepository;
+import app.store.secority.JwtResponse;
 import app.store.secority.SecurityUtils;
 import app.store.secority.jwt.JWTConfigurer;
 import app.store.secority.jwt.JwtTokenProvider;
@@ -14,7 +15,6 @@ import app.store.web.rest.error.*;
 import app.store.web.rest.vm.KeyAndPasswordVM;
 import app.store.web.rest.vm.LoginVM;
 import app.store.web.rest.vm.ManagedUserVM;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,7 +149,7 @@ public class AccountResource {
 
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+    public ResponseEntity<JwtResponse> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
@@ -160,25 +160,7 @@ public class AccountResource {
         String jwt = tokenProvider.createToken(authentication, rememberMe);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
-    }
-
-    static class JWTToken {
-
-        private String idToken;
-
-        JWTToken(String idToken) {
-            this.idToken = idToken;
-        }
-
-        @JsonProperty("id_token")
-        String getIdToken() {
-            return idToken;
-        }
-
-        void setIdToken(String idToken) {
-            this.idToken = idToken;
-        }
+        return new ResponseEntity<>(new JwtResponse(jwt), httpHeaders, HttpStatus.OK);
     }
 
 }

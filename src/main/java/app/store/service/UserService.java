@@ -114,7 +114,7 @@ public class UserService {
                     }
                     if (userDto.getAuthorities() != null) {
                         Set<Authority> authorities = userDto.getAuthorities().stream()
-                                .map(authorityRepository::findById)
+                                .map(authorityRepository::findByName)
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
                                 .collect(Collectors.toSet());
@@ -187,7 +187,6 @@ public class UserService {
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
-
         return userRepository.findOneByResetKey(key)
                 .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
                 .map(user -> {
@@ -208,11 +207,6 @@ public class UserService {
                 );
         return user;
     }
-
-//    List<GrantedAuthority> authorities = user.getAuthorities().stream().map(role ->
-//            new SimpleGrantedAuthority(role.getName())
-//    ).collect(Collectors.toList());
-
 
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream()
@@ -251,7 +245,7 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorityRepository.findByName(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);

@@ -12,9 +12,9 @@ import java.util.Objects;
 public class Authority implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
     @NotNull
     @Size(max = 50)
-    @Id
     private String name;
 
     public String getName() {

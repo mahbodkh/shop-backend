@@ -1,15 +1,11 @@
 package app.store.service.dto.enums;
 
-public enum CartStatusDto {
+public enum InvoiceStatusDto {
 
-    ACTIVE,
-    COMPLETE,
-    SUSPEND,
-    DEACTIVE,
+    CHECKOUT,
     ;
 
-
-    CartStatusDto() {
+    InvoiceStatusDto() {
     }
 
     private String value;

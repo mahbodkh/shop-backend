@@ -1,10 +1,10 @@
 package app.store.secority.jwt;
 
+import app.store.persistence.domain.User;
+import app.store.secority.Constants;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -23,39 +24,41 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
     private final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-    @Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
-
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h
-
     private static final String AUTHORITIES_KEY = "auth";
 
-    private final Base64.Encoder encoder = Base64.getEncoder();
+    //    @Value("${security.jwt.token.secret-key:secret}")
+    private String secretKey;
+//    @Value("${security.jwt.token.expire-length:3600000}")
+//    private long validityInMilliseconds = 3600000; // 1h
 
     private long tokenValidityInMilliseconds;
-
     private long tokenValidityInMillisecondsForRememberMe;
+    private final Base64.Encoder encoder = Base64.getEncoder();
 
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+
+    public JwtTokenProvider(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        this.secretKey = encoder.encodeToString(Constants.SIGNING_KEY.getBytes(StandardCharsets.UTF_8));
+        tokenValidityInMilliseconds = 1000 * 1800L;
+        tokenValidityInMillisecondsForRememberMe = 1000 * 2592000L;
     }
 
     public String createToken(String username, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", roles);
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + tokenValidityInMilliseconds);
         return Jwts.builder()//
                 .setClaims(claims)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, secretKey)//
+                .signWith(SignatureAlgorithm.HS512, secretKey)//
                 .compact();
     }
 
@@ -98,18 +101,24 @@ public class JwtTokenProvider {
         return null;
     }
 
+    public String generateJwtToken(Authentication authentication) {
 
-//    public boolean validateToken(String token) {
-//        try {
-//            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-//            if (claims.getBody().getExpiration().before(new Date())) {
-//                return false;
-//            }
-//            return true;
-//        } catch (JwtException | IllegalArgumentException e) {
-//            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
-//        }
-//    }
+        User userPrincipal = (User) authentication.getPrincipal();
+
+        return Jwts.builder()
+                .setSubject((userPrincipal.getMobile().toString()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + tokenValidityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
+
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody().getSubject();
+    }
 
 
     public boolean validateToken(String authToken) {

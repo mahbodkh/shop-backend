@@ -88,32 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        //@formatter:off
-//        http
-//                .httpBasic().disable()
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/api/register").permitAll()
-//                .antMatchers("/api/activate").permitAll()
-//                .antMatchers("/api/authenticate").permitAll()
-//                .antMatchers("/api/account/reset-password/init").permitAll()
-//                .antMatchers("/api/account/reset-password/finish").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/v1/product/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-//                .antMatchers(HttpMethod.DELETE, "/product/**").hasRole("ADMIN")
-//                .antMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
-//                .antMatchers("/api/**").authenticated()
-////                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**").permitAll()
-//                .anyRequest().authenticated()
-//            .and()
-//                .apply(securityConfigurerAdapter());
-//        //@formatter:on
-//    }
-
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -139,12 +113,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/account/reset-password/init").permitAll()
             .antMatchers("/api/v1/account/reset-password/finish").permitAll()
             .antMatchers("/api/v1/**").authenticated()
-//            .antMatchers("/management/health").permitAll()
-//            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
             .apply(securityConfigurerAdapter());
-
     }
 
     private JWTConfigurer securityConfigurerAdapter() {

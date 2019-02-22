@@ -1,15 +1,13 @@
 package app.store.service.dto.enums;
 
-public enum CartStatusDto {
+public enum PaymentMethodDto {
 
-    ACTIVE,
-    COMPLETE,
-    SUSPEND,
-    DEACTIVE,
+    ONLINE,
+    COLLECT_ON_DELIVERY,
+    CARD_TO_CARD,
     ;
 
-
-    CartStatusDto() {
+    PaymentMethodDto() {
     }
 
     private String value;

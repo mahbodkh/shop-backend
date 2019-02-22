@@ -1,15 +1,15 @@
 package app.store.service.dto.enums;
 
-public enum CartStatusDto {
+public enum OrderStatusDto {
 
-    ACTIVE,
-    COMPLETE,
+    ISSUED,
     SUSPEND,
-    DEACTIVE,
+    DELIVERED,
+    DONE,
     ;
 
 
-    CartStatusDto() {
+    OrderStatusDto() {
     }
 
     private String value;

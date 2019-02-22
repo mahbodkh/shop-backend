@@ -1,14 +1,13 @@
 package app.store.persistence.domain.enums;
 
-public enum CartStatus {
+public enum PaymentMethod {
 
-    ACTIVE,
-    COMPLETE,
-    SUSPEND,
-    DEACTIVE,
+    ONLINE,
+    COLLECT_ON_DELIVERY,
+    CARD_TO_CARD,
     ;
 
-    CartStatus() {
+    PaymentMethod() {
     }
 
     private String value;
