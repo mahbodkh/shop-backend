@@ -14,10 +14,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
@@ -85,7 +82,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String cardNumber;
 
     @Field
-    private List<Shipping> shippings;
+    private List<Shipping> shippings = new ArrayList<>();
 
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
