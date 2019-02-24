@@ -2,7 +2,7 @@ package app.store.config;
 
 import app.store.secority.AuthoritiesConstants;
 import app.store.secority.jwt.JWTConfigurer;
-import app.store.secority.jwt.JwtTokenProvider;
+import app.store.secority.jwt.TokenProvider;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,21 +31,18 @@ import javax.annotation.PostConstruct;
 @Import(SecurityProblemSupport.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final UserDetailsService userDetailsService;
 
-    private final JwtTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     private final CorsFilter corsFilter;
 
     private final SecurityProblemSupport problemSupport;
 
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, JwtTokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public SecurityConfig(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
         this.tokenProvider = tokenProvider;
@@ -86,7 +83,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/index.html")
                 .antMatchers("/test/**");
     }
-
 
 
     @Override

@@ -3,6 +3,8 @@ package app.store.secority;
 import app.store.persistence.domain.User;
 import app.store.persistence.repository.UserRepository;
 import app.store.secority.error.UserNotActivatedException;
+import app.store.service.util.TextHelper;
+import app.store.web.rest.error.MobileNotFoundException;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,12 @@ public class DomainUserDetailsService implements UserDetailsService {
                     .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
         }
 
+        if (login.matches("(^(9)[0-9]{9})")) {
+            Optional<User> userByMobileFromDatabase = userRepository.findOneByMobile(Long.valueOf(TextHelper.changeDigitsToEnglish(login)));
+            return userByMobileFromDatabase.map(user -> createSpringSecurityUser(login, user))
+                    .orElseThrow(() -> new MobileNotFoundException("User with mobile " + login + "was not found in the database"));
+        }
+
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
         return userByLoginFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user))
@@ -58,4 +66,6 @@ public class DomainUserDetailsService implements UserDetailsService {
                 user.getPassword(),
                 grantedAuthorities);
     }
+
+
 }

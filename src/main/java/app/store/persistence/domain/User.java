@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
@@ -26,13 +27,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private ObjectId id;
 
     @NotNull
-    @Size(min = 10, max = 10)
+    @Pattern(regexp = "^(9)[0-9]{9}")
     @Indexed(unique = true)
     private Long mobile;
 
     @NotNull
     @Size(min = 1, max = 50)
-    @Indexed
+    @Indexed(unique = true)
     private String login;
 
     @JsonIgnore

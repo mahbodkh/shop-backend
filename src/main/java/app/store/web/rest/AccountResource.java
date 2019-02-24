@@ -5,7 +5,7 @@ import app.store.persistence.repository.UserRepository;
 import app.store.secority.JwtResponse;
 import app.store.secority.SecurityUtils;
 import app.store.secority.jwt.JWTConfigurer;
-import app.store.secority.jwt.JwtTokenProvider;
+import app.store.secority.jwt.TokenProvider;
 import app.store.service.MailService;
 import app.store.service.SmsService;
 import app.store.service.UserService;
@@ -41,11 +41,12 @@ public class AccountResource {
     private final UserService userService;
     private final MailService mailService;
     private final SmsService smsService;
-    private final JwtTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
 
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, SmsService smsService, JwtTokenProvider tokenProvider, AuthenticationManager authenticationManager) {
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, SmsService smsService, TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -87,7 +88,6 @@ public class AccountResource {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
     }
-
 
     @GetMapping("/account")
     public UserDto getAccount() {
@@ -161,6 +161,12 @@ public class AccountResource {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JwtResponse(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        log.debug("REST request to check if the current user is authenticated");
+        tokenProvider.resolveToken(request);
     }
 
 }
