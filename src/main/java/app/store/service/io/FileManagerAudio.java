@@ -10,13 +10,13 @@ package app.store.service.io;///*
 //
 //import com.vasl.vaslapp.common.global.ConfigReader;
 //import com.vasl.vaslapp.common.global.general.ConfigReaderDatabase;
-//import com.vasl.vaslapp.common.global.general.FileManager;
+//import com.vasl.vaslapp.common.global.general.FileManager_Old;
 //import com.vasl.vaslapp.common.global.model.FileSave;
 //import org.apache.commons.io.FilenameUtils;
 //import org.springframework.web.multipart.MultipartFile;
 //
 //
-//public class FileManagerAudio extends FileManager {
+//public class FileManagerAudio extends FileManager_Old {
 //
 //    private static final String prefixCover = "";
 //    MultipartFile file;

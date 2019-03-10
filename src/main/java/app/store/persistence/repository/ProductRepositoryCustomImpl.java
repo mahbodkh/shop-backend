@@ -18,15 +18,6 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         this.mongoTemplate = mongoTemplate;
     }
 
-//    public Document getAllBy(String searchString, Criteria filterCriteria) {
-//        Document textSearch = new Document();
-//        textSearch.put("text", "product");
-//        textSearch.put("search", searchString);
-//        textSearch.put("filter", org.springframework.data.mongodb.core.query.Query.query(filterCriteria).getQueryObject());
-//        textSearch.put("limit", 10);
-//        textSearch.put("project", new Document("_id", 1));
-//        return mongoOperations.executeCommand(textSearch);
-//    }
 
     @Override
     public List<Product> onTextValueQuery(String text) {

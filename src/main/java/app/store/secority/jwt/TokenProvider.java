@@ -8,11 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
 
 @Component
@@ -28,6 +29,7 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
 
+    Set<String> blackList = new ConcurrentSkipListSet<>();
 
     //    @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey;
@@ -41,7 +43,7 @@ public class TokenProvider {
 
     private final UserDetailsService userDetailsService;
 
-    public TokenProvider( UserDetailsService userDetailsService) {
+    public TokenProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -78,12 +80,13 @@ public class TokenProvider {
             validity = new Date(now + this.tokenValidityInMilliseconds);
         }
 
-        return Jwts.builder()
+        String compact = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .setExpiration(validity)
                 .compact();
+        return compact;
     }
 
 
@@ -91,6 +94,7 @@ public class TokenProvider {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
+
 
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
@@ -123,9 +127,16 @@ public class TokenProvider {
                 .getBody().getSubject();
     }
 
+    public void invalideJwtToken(String token) {
+        blackList.add(token);
+    }
+
+
 
     public boolean validateToken(String authToken) {
         try {
+            if (blackList.equals(authToken)) return false;
+
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {

@@ -5,7 +5,7 @@ package app.store.service.io;//package app.store.util.io;
 //import org.apache.commons.lang.ArrayUtils;
 //import org.springframework.web.multipart.MultipartFile;
 //
-//public class FileManagerFile extends FileManager {
+//public class FileManagerFile extends FileManager_Old {
 //
 //
 //    private MultipartFile file;

@@ -1,5 +1,6 @@
 package app.store.web.rest;
 
+import app.store.persistence.domain.Media;
 import app.store.service.FileService;
 import app.store.service.ProductService;
 import app.store.service.dto.ProductDto;
@@ -41,8 +42,8 @@ public class ProductResource {
     }
 
 
-    @PostMapping("/product")
-    public ResponseEntity<String> createProduct(@Valid @RequestBody ProductDto productDto, @Valid @RequestParam("file") MultipartFile[] file) throws URISyntaxException {
+    @PostMapping(value = "/product")
+    public ResponseEntity<String> createProduct(@RequestPart(value = "productDto", required = false) ProductDto productDto, @RequestPart("file") MultipartFile[] file) throws URISyntaxException {
         log.debug("REST request to save Product : {}", productDto);
         if (productDto == null) {
             throw new ProductInvalidException();
@@ -100,5 +101,14 @@ public class ProductResource {
         final Page<ProductDto> page = productService.getAllProducts(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @PostMapping("/uploadFile")
+    public void uploadFile(@RequestParam("file") MultipartFile file) {
+        Media media = fileService.storeFile(file);
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/downloadFile/")
+//                .path(fileName)
+//                .toUriString();
     }
 }

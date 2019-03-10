@@ -16,6 +16,8 @@ public class Configuration implements Serializable {
     private String theme;
     @Field
     private String imageSize;
+    @Field
+    private String BaseImageLocation;
 
 
     public ObjectId getId() {
@@ -48,5 +50,13 @@ public class Configuration implements Serializable {
 
     public void setImageSize(String imageSize) {
         this.imageSize = imageSize;
+    }
+
+    public String getBaseImageLocation() {
+        return BaseImageLocation;
+    }
+
+    public void setBaseImageLocation(String baseImageLocation) {
+        BaseImageLocation = baseImageLocation;
     }
 }

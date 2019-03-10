@@ -14,9 +14,10 @@ public class Media implements Serializable {
     private AssetType type;
     private String name;
     private String url;
-    private Double capacity;
-    private Double width;
-    private Double height;
+    private String extension;
+    private Long capacity;
+    private Long width;
+    private Long height;
     private Double duration;
 
 
@@ -52,27 +53,35 @@ public class Media implements Serializable {
         this.url = url;
     }
 
-    public Double getCapacity() {
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public Long getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Double capacity) {
+    public void setCapacity(Long capacity) {
         this.capacity = capacity;
     }
 
-    public Double getWidth() {
+    public Long getWidth() {
         return width;
     }
 
-    public void setWidth(Double width) {
+    public void setWidth(Long width) {
         this.width = width;
     }
 
-    public Double getHeight() {
+    public Long getHeight() {
         return height;
     }
 
-    public void setHeight(Double height) {
+    public void setHeight(Long height) {
         this.height = height;
     }
 

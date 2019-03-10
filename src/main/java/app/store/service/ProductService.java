@@ -246,10 +246,34 @@ public class ProductService {
                 .map(productMapper::toDto);
     }
 
-    protected Optional<Product> getProductAndReturn(String id) {
+    public Optional<Product> getProductWithoutMapping(String id) {
         return Optional.of(productRepository.findOneById(new ObjectId(id)))
                 .filter(Optional::isPresent)
                 .map(Optional::get);
+    }
+
+    public Optional<Product> updateProductMedia(String productId, Media media) {
+        return Optional.of(productRepository.findOneById(new ObjectId(productId)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(pro -> {
+
+                    List<Media> mediaProduct = new ArrayList<>();
+                    mediaProduct.forEach(m -> {
+                        m.setCapacity(media.getCapacity());
+                        m.setUrl(media.getUrl());
+                        m.setType(media.getType());
+                        m.setName(media.getName());
+                        m.setExtension(media.getExtension());
+                        m.setDuration(media.getDuration());
+                        m.setHeight(media.getHeight());
+                        m.setWidth(media.getWidth());
+                        mediaProduct.add(m);
+                    });
+                    pro.setMediaList(mediaProduct);
+                    return productRepository.save(pro);
+                });
+
     }
 
 

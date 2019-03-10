@@ -11,7 +11,7 @@ package app.store.service.io;///*
 //import org.springframework.web.multipart.MultipartFile;
 //
 //
-//public class FileManagerVideo extends FileManager {
+//public class FileManagerVideo extends FileManager_Old {
 //
 //    private static final String prefixCover = "";
 //    MultipartFile file;

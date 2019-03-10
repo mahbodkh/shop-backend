@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConfigurationRepository extends MongoRepository<Configuration, ObjectId> {
 
-
 }

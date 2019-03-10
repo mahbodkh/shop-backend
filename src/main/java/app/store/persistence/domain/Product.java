@@ -49,6 +49,8 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     @TextIndexed(weight = 2)
     @Field
     private List<Keyword> keywords = new ArrayList<>();
+    @Field
+    private List<Specification> specifications = new ArrayList<>();
 
 
     public ObjectId getId() {
@@ -171,6 +173,13 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.keywords = keywords;
     }
 
+    public List<Specification> getSpecifications() {
+        return specifications;
+    }
+
+    public void setSpecifications(List<Specification> specifications) {
+        this.specifications = specifications;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -204,6 +213,7 @@ public class Product extends AbstractAuditingEntity implements Serializable {
                 ", variants=" + variants +
                 ", relateProduct=" + relateProduct +
                 ", keywords=" + keywords +
+                ", specifications=" + specifications +
                 '}';
     }
 }

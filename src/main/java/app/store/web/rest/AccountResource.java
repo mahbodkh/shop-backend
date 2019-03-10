@@ -27,7 +27,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -43,7 +45,6 @@ public class AccountResource {
     private final SmsService smsService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
-
 
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, SmsService smsService, TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
@@ -164,9 +165,11 @@ public class AccountResource {
     }
 
     @GetMapping("/logout")
-    public void logout(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
-        tokenProvider.resolveToken(request);
+    public String logoutDo(HttpServletRequest request) {
+        String jwt = tokenProvider.resolveToken(request);
+        tokenProvider.invalideJwtToken(jwt);
+        return "logout";
     }
+
 
 }

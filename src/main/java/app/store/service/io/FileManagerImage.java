@@ -1,18 +1,11 @@
-package app.store.service.io;///*
-// * Created by Amir Moradabadi on 2017/11/7 with love.
-// */
-//
-//package app.store.util.io;
-//
-//import com.vasl.vaslapp.common.global.ConfigReader;
-//import com.vasl.vaslapp.common.global.general.ConfigReaderDatabase;
-//import com.vasl.vaslapp.common.global.general.FileManager;
-//import com.vasl.vaslapp.common.global.model.FileSave;
-//import org.springframework.web.multipart.MultipartFile;
-//
-//
-//public class FileManagerImage extends FileManager {
-//
+package app.store.service.io;
+
+
+import org.springframework.web.multipart.MultipartFile;
+
+
+public class FileManagerImage {
+
 //    MultipartFile cover;
 //    String appid;
 //    String imageId;
@@ -186,5 +179,5 @@ package app.store.service.io;///*
 //            path = ConfigReader.getConfig().getString("path_pazh_image");
 //        return path;
 //    }
-//
-//}
+
+}

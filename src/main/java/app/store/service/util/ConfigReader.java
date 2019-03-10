@@ -13,7 +13,7 @@ public class ConfigReader {
 
     private static Properties properties = null;
     private static String configPath = null;
-    private static final String fileName = "application.properties";
+    private static final String fileName = "config/application.properties";
 
     public ConfigReader() {
     }

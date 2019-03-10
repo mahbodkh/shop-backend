@@ -6,7 +6,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -23,18 +22,16 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Id
     private ObjectId id;
 
-    @NotNull
     @Pattern(regexp = "^(9)[0-9]{9}")
     @Indexed(unique = true)
     private Long mobile;
 
-    @NotNull
     @Size(min = 1, max = 50)
     @Indexed(unique = true)
     private String login;
 
-    @JsonIgnore
     @NotNull
+    @JsonIgnore
     @Size(min = 60, max = 60)
     private String password;
 
@@ -51,8 +48,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Indexed(unique = true)
     private String email;
 
-    @Size(min = 2, max = 6)
     @Field
+    @Size(min = 2, max = 6)
     private String gender;
 
     private boolean activated = false;
@@ -66,8 +63,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String imageUrl;
 
     @Size(max = 20)
-    @Field("activation_key")
     @JsonIgnore
+    @Field("activation_key")
     private String activationKey;
 
     @Size(max = 20)
@@ -86,9 +83,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
-
-    @JsonIgnore
-    private MultipartFile data;
 
 
     public ObjectId getId() {
@@ -227,13 +221,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
-    public MultipartFile getData() {
-        return data;
-    }
-
-    public void setData(MultipartFile data) {
-        this.data = data;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -274,7 +261,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
                 ", cardNumber='" + cardNumber + '\'' +
                 ", shippings=" + shippings +
                 ", authorities=" + authorities +
-                ", data=" + data +
                 '}';
     }
 }
