@@ -25,9 +25,9 @@ spring:
     basename: i18n/messages
 
 
-  thymeleaf:
-    mode: HTML
-    cache: false
+#  thymeleaf:
+#    mode: HTML
+#    cache: false
 
 
   mail:

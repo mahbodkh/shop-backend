@@ -112,7 +112,7 @@ public class Payment extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Payment{" +
+        return "PaymentMethod{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", invoiceId=" + invoiceId +

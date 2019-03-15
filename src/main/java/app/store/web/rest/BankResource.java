@@ -37,7 +37,7 @@ public class BankResource {
 
     @GetMapping("/bank/{id}")
     public ResponseEntity<BankDto> getBank(@Valid @PathVariable String id) {
-        log.debug("REST request to get Bank : {}", id);
+        log.debug("REST request to get PaymentMethod : {}", id);
         Optional<BankDto> bank = bankService.getBank(id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("bank.get", " "))
@@ -46,7 +46,7 @@ public class BankResource {
 
     @PostMapping("/bank")
     public ResponseEntity<String> createBank(BankDto bankDto) throws URISyntaxException {
-        log.debug("REST request to save Bank : {}", bankDto);
+        log.debug("REST request to save PaymentMethod : {}", bankDto);
 
         if (bankService.isExistByName(bankDto.getName())) {
             throw new BankAlreadyUsedException();
@@ -60,7 +60,7 @@ public class BankResource {
 
     @PutMapping("/bank/{id}")
     public ResponseEntity<BankDto> updateBank(@Valid @RequestBody BankDto bankDto, @Valid @PathVariable String id) throws URISyntaxException {
-        log.debug("REST request to update Bank: {} with id : {}", bankDto, id);
+        log.debug("REST request to update PaymentMethod: {} with id : {}", bankDto, id);
         if (!bankService.isExistById(id))
             throw new BankNotFoundException();
         BankDto result = bankService.updateBank(bankDto, id).get();
@@ -78,7 +78,7 @@ public class BankResource {
 
     @GetMapping("/bank/all")
     public ResponseEntity<List<BankDto>> getAllBank(Pageable pageable) {
-        log.debug("REST request to get all Bank by pageable: {}", pageable);
+        log.debug("REST request to get all PaymentMethod by pageable: {}", pageable);
         final Page<BankDto> bank = bankService.getAllBank(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(bank, "/api/banks");
         return new ResponseEntity<>(bank.getContent(), headers, HttpStatus.OK);

@@ -3,6 +3,7 @@ package app.store.config;
 import app.store.secority.AuthoritiesConstants;
 import app.store.secority.jwt.JWTConfigurer;
 import app.store.secority.jwt.TokenProvider;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
@@ -33,17 +37,18 @@ import javax.annotation.PostConstruct;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
     private final UserDetailsService userDetailsService;
-
     private final TokenProvider tokenProvider;
-
     private final CorsFilter corsFilter;
-
     private final SecurityProblemSupport problemSupport;
 
 
-    public SecurityConfig(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+    public SecurityConfig(AuthenticationManagerBuilder authenticationManagerBuilder
+            , UserDetailsService userDetailsService
+            , TokenProvider tokenProvider
+            , CorsFilter corsFilter
+            , SecurityProblemSupport problemSupport) {
+
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
         this.tokenProvider = tokenProvider;
@@ -61,6 +66,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("HEAD",
+                "GET", "POST", "PUT", "DELETE", "PATCH"));
+        // setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        configuration.setAllowCredentials(true);
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization",
+                "Cache-Control", "Content-Type", "Content-Length", "X-Requested-With", "Accept"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
@@ -97,16 +121,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutSuccessUrl("/api/v1/logout").deleteCookies("JSESSIONID")
             .invalidateHttpSession(true)
         .and()
-            .csrf()
-            .disable()
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling()
-            .authenticationEntryPoint(problemSupport)
-            .accessDeniedHandler(problemSupport)
-        .and()
             .headers()
             .frameOptions()
-            .disable()
+            .sameOrigin().httpStrictTransportSecurity()
+            .includeSubDomains(true)
+            .maxAgeInSeconds(604800);
+//            .disable()
+
+        http
+            .csrf()
+            .ignoringAntMatchers("/api/**")
+//            .disable()
+//            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+//            .exceptionHandling()
+//            .authenticationEntryPoint(problemSupport)
+//            .accessDeniedHandler(problemSupport)
+        .and()
+            .cors()
         .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -115,6 +146,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/register").permitAll()
             .antMatchers("/api/v1/activate").permitAll()
             .antMatchers("/api/v1/authenticate").permitAll()
+            .antMatchers("/api/v1/category/sub").permitAll()
+            .antMatchers("/api/v1/category/root").permitAll()
+            .antMatchers("/api/v1/category").permitAll()
+            .antMatchers("/api/v1/categories").permitAll()
+            .antMatchers("/api/v1/keyword/all").permitAll()
             .antMatchers("/api/v1/account/reset-password/init").permitAll()
             .antMatchers("/api/v1/account/reset-password/finish").permitAll()
             .antMatchers("/api/v1/**").authenticated()

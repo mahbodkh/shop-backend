@@ -138,7 +138,7 @@ public class Bank extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Bank{" +
+        return "PaymentMethod{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", merchant='" + merchant + '\'' +

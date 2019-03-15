@@ -80,9 +80,6 @@ public class Startup implements ApplicationListener<ContextRefreshedEvent> {
 
 
         log.debug("The Application First System User");
-//        userRepository.save(anonymous);
-//        userRepository.save(admin);
-//        userRepository.save(system);
         users = userRepository.saveAll(Arrays.asList(anonymous, system, admin));
     }
 

@@ -1,5 +1,7 @@
 package app.store.secority.jwt;
 
+import app.store.persistence.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -16,6 +18,10 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     private TokenProvider tokenProvider;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     public JWTFilter(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;

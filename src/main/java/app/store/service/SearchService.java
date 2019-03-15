@@ -1,7 +1,7 @@
 package app.store.service;
 
-import app.store.persistence.domain.Category;
-import app.store.persistence.domain.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class SearchService {
+    private final Logger log = LoggerFactory.getLogger(SearchService.class);
 
     private final ProductService productService;
     private final CategoryService categoryService;

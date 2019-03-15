@@ -146,7 +146,7 @@
             <version>2.8.5</version>
         </dependency>
 
-    <!-- Jackson -->
+        <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
@@ -168,11 +168,21 @@
             <version>2.9.8</version>
         </dependency>
 
+        <!-- Web Service SOAP / WSDL -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
+
         <!-- Upload -->
         <!--<dependency>-->
-            <!--<groupId>commons-fileupload</groupId>-->
-            <!--<artifactId>commons-fileupload</artifactId>-->
-            <!--<version>1.3.1</version>-->
+        <!--<groupId>commons-fileupload</groupId>-->
+        <!--<artifactId>commons-fileupload</artifactId>-->
+        <!--<version>1.3.1</version>-->
         <!--</dependency>-->
 
     </dependencies>

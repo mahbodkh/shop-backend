@@ -26,7 +26,7 @@ public class AuthorityResource {
 
     @PostMapping("/authority")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createBank(AuthorityDto authorityDto) {
+    public void createAuthority(AuthorityDto authorityDto) {
         log.debug("REST request to save authority : {}", authorityDto);
         if (authorityService.isExistByName(authorityDto.getName())) {
             throw new AuthorityAlreadyUsedException();

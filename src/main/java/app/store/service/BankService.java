@@ -30,7 +30,7 @@ public class BankService {
         return Optional.of(bankMapper.toEntity(bankDto))
                 .map(bank -> {
                     Bank result = bankRepository.save(bank);
-                    log.debug("Save Information for Bank: {}", bank);
+                    log.debug("Save Information for PaymentMethod: {}", bank);
                     return result.getId().toString();
                 });
     }
@@ -59,7 +59,7 @@ public class BankService {
                     bank.setGatewayPostfixMobile(bankDto.getGatewayPostfixMobile());
 
                     Bank result = bankRepository.save(bank);
-                    log.debug("Changed Information for Bank: {}", result);
+                    log.debug("Changed Information for PaymentMethod: {}", result);
                     return result;
                 }).map(bankMapper::toDto);
     }
@@ -68,7 +68,7 @@ public class BankService {
         bankRepository.findById(new ObjectId(id))
                 .ifPresent(bank -> {
                     bankRepository.save(bank);
-                    log.debug("Deleted Bank: {}", bank);
+                    log.debug("Deleted PaymentMethod: {}", bank);
                 });
     }
 

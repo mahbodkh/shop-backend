@@ -154,8 +154,9 @@ public class UserService {
                 .map(user -> {
                     user.setResetKey(RandomUtil.generateResetKey());
                     user.setResetDate(Instant.now());
-                    userRepository.save(user);
-                    return user;
+                    User save = userRepository.save(user);
+                    log.debug("The password reset(by login): {}", save);
+                    return save;
                 });
     }
 
@@ -166,6 +167,7 @@ public class UserService {
                     user.setResetKey(RandomUtil.generateResetKey());
                     user.setResetDate(Instant.now());
                     User save = userRepository.save(user);
+                    log.debug("The password reset (by mobile): {}", user);
                     return save;
                 }).map(userMapper::toDto);
     }
