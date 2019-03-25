@@ -3,7 +3,7 @@ package app.store.service.dto.enums;
 public enum TrackingStatusDto {
 
     PREPARING,
-    REGISTERD,
+    REGISTERED,
     ONTRUCK,
     COMPLETE,
     DELIVERED;

@@ -2,6 +2,7 @@ package app.store.service.dto;
 
 import app.store.service.dto.enums.OrderStatusDto;
 
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,11 @@ public class OrderDto {
 
     public OrderDto() {
     }
-
     private String id;
+    @NotNull
     private String userId;
     private Instant checkout;
+    @NotNull
     private List<ProductCartDto> productCartDtos = new ArrayList<>();
     private List<TrackingDto> tracking = new ArrayList<>();
     private String paymentId;

@@ -6,7 +6,7 @@ public final class ErrorConstants {
 
     public static final String ERR_CONCURRENCY_FAILURE = "error.concurrencyFailure";
     public static final String ERR_VALIDATION = "error.validation";
-    public static final String PROBLEM_BASE_URL = "https://www.jhipster.tech/problem";
+    public static final String PROBLEM_BASE_URL = "https://www.shop.io/problem";
 
     public static final URI DEFAULT_TYPE = URI.create(PROBLEM_BASE_URL + "/problem-with-message");
     public static final URI CONSTRAINT_VIOLATION_TYPE = URI.create(PROBLEM_BASE_URL + "/constraint-violation");
@@ -32,19 +32,24 @@ public final class ErrorConstants {
     public static final URI PRODUCT_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/product-already-used");
     public static final URI PRODUCT_INVALID_DATA = URI.create(PROBLEM_BASE_URL + "/product-invalid");
 
-    public static final URI CATEGORY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "category-not-found");
-    public static final URI CATEGORY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "category-already-used");
-    public static final URI CATEGORY_NOT_DELETED_TYPE = URI.create(PROBLEM_BASE_URL + "category-already-category");
+    public static final URI CATEGORY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/category-not-found");
+    public static final URI CATEGORY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/category-already-used");
+    public static final URI CATEGORY_NOT_DELETED_TYPE = URI.create(PROBLEM_BASE_URL + "/category-already-category");
 
-    public static final URI KEYWORD_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "keyword-not-found");
+    public static final URI KEYWORD_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/keyword-not-found");
 
-    public static final URI VENDOR_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "vendor-already-used");
-    public static final URI VENDOR_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "vendor-not-found");
+    public static final URI VENDOR_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/vendor-already-used");
+    public static final URI VENDOR_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/vendor-not-found");
 
-    public static final URI BANK_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "bank-already-used");
-    public static final URI BANK_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "bank-not-found");
+    public static final URI BANK_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/bank-already-used");
+    public static final URI BANK_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/bank-not-found");
 
-    public static final URI AUTHORITY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "authority-already-used");
+    public static final URI AUTHORITY_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/authority-already-used");
+
+    public static final URI ORDER_INVALID_DATA = URI.create(PROBLEM_BASE_URL + "/order-invalid");
+    public static final URI ORDER_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/order-already-used");
+    public static final URI ORDER_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/order-not-found");
+
 
     private ErrorConstants() {
     }

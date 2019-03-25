@@ -1,6 +1,8 @@
 package app.store.secority;
 
-public class JwtResponse {
+import java.io.Serializable;
+
+public class JwtResponse implements Serializable {
     private String token;
     private String type = "Bearer";
 

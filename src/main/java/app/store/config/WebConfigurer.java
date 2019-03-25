@@ -46,7 +46,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
+//        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 //        initMetrics(servletContext, disps);
 //        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
 //            initCachingHttpHeadersFilter(servletContext, disps);
@@ -78,9 +78,9 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/v1/category/root").allowedOrigins("*");
-                registry.addMapping("/api/v1/keyword/all").allowedOrigins("*");
-                registry.addMapping("/api/v1/authenticate").allowedOrigins("*");
+                registry.addMapping("/api/**")
+                        .allowedOrigins("*")
+                        .allowCredentials(true);
             }
         };
     }

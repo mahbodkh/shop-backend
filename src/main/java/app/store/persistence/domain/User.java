@@ -23,11 +23,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private ObjectId id;
 
     @Pattern(regexp = "^(9)[0-9]{9}")
-    @Indexed(unique = true)
+    @Indexed(unique = true, sparse = true)
     private Long mobile;
 
     @Size(min = 1, max = 50)
-    @Indexed(unique = true)
+    @Indexed(unique = true, sparse = true)
     private String login;
 
     @NotNull
@@ -45,7 +45,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Email
     @Size(min = 5, max = 254)
-    @Indexed(unique = true)
+    @Indexed(unique = true, sparse = true)
     private String email;
 
     @Field

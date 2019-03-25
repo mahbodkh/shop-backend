@@ -20,22 +20,21 @@ public class UserDto {
 
     private String id;
     @NotNull
-    //    @Size(min = 10, max = 11)
     private Long mobile;
     private String login;
-    @Size(max = 50)
+//    @Size(max = 50)
     private String firstName;
-    @Size(max = 50)
+//    @Size(max = 50)
     private String lastName;
     private boolean activated = false;
     //    @Email
-    @Size(min = 5, max = 254)
+//    @Size(min = 5, max = 254)
     private String email;
-    @Size(min = 2, max = 6)
+//    @Size(min = 2, max = 6)
     private String gender;
-    @Size(min = 2, max = 6)
+//    @Size(min = 2, max = 6)
     private String langKey;
-    @Size(max = 256)
+//    @Size(max = 256)
     private String imageUrl;
     private String cardNumber;
     private List<AddressDto> addresses;

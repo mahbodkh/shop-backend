@@ -59,7 +59,7 @@ public class TokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + tokenValidityInMilliseconds);
         return Jwts.builder()//
-                .setClaims(claims)//
+                .setClaims(claims)// 6
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
                 .signWith(SignatureAlgorithm.HS512, secretKey)//

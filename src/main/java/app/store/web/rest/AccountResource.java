@@ -58,18 +58,28 @@ public class AccountResource {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public void registerAccount(@RequestBody ManagedUserVM managedUserVM) {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {
-            throw new LoginAlreadyUsedException();
-        });
-        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {
-            throw new EmailAlreadyUsedException();
-        });
+        if (managedUserVM.getLogin() != null)
+            userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {
+                throw new LoginAlreadyUsedException();
+            });
+        if (managedUserVM.getEmail() != null)
+            userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {
+                throw new EmailAlreadyUsedException();
+            });
+        if (managedUserVM.getMobile() != null)
+            userRepository.findOneByMobile(managedUserVM.getMobile()).ifPresent(u -> {
+                throw new MobileAlreadyUsedException();
+            });
+
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+        if (managedUserVM.getEmail() != null)
+            mailService.sendActivationEmail(user);
+        if (managedUserVM.getMobile() != null)
+            smsService.sendActivationSms(user);
     }
 
 
@@ -147,7 +157,7 @@ public class AccountResource {
     }
 
 
-    @PostMapping("/authenticate")
+    @PostMapping(value = "/authenticate")
     public ResponseEntity<JwtResponse> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         UsernamePasswordAuthenticationToken authenticationToken =

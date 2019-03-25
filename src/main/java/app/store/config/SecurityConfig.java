@@ -68,24 +68,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(ImmutableList.of("*"));
-        configuration.setAllowedMethods(ImmutableList.of("HEAD",
-                "GET", "POST", "PUT", "DELETE", "PATCH"));
-        // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
-        configuration.setAllowCredentials(true);
-        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-        // will fail with 403 Invalid CORS request
-        configuration.setAllowedHeaders(ImmutableList.of("Authorization",
-                "Cache-Control", "Content-Type", "Content-Length", "X-Requested-With", "Accept"));
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        final CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(ImmutableList.of("*"));
+//        configuration.setAllowedMethods(ImmutableList.of("HEAD",
+//                "GET", "POST", "PUT", "DELETE", "PATCH"));
+//        // setAllowCredentials(true) is important, otherwise:
+//        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+//        configuration.setAllowCredentials(true);
+//        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+//        // will fail with 403 Invalid CORS request
+//        configuration.setAllowedHeaders(ImmutableList.of("Authorization",
+//                "Cache-Control", "Content-Type", "Content-Length", "X-Requested-With", "Accept"));
+//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+////        source.registerCorsConfiguration("/**", configuration);
 //        source.registerCorsConfiguration("/**", configuration);
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//        return source;
+//    }
 
     @Bean
     @Override
@@ -131,26 +131,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf()
             .ignoringAntMatchers("/api/**")
-//            .disable()
+            .disable()
 //            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 //            .exceptionHandling()
 //            .authenticationEntryPoint(problemSupport)
 //            .accessDeniedHandler(problemSupport)
-        .and()
+//        .and()
             .cors()
         .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+                // account
             .authorizeRequests()
             .antMatchers("/api/v1/register").permitAll()
             .antMatchers("/api/v1/activate").permitAll()
             .antMatchers("/api/v1/authenticate").permitAll()
+                // category
             .antMatchers("/api/v1/category/sub").permitAll()
             .antMatchers("/api/v1/category/root").permitAll()
             .antMatchers("/api/v1/category").permitAll()
             .antMatchers("/api/v1/categories").permitAll()
+                // keyword
             .antMatchers("/api/v1/keyword/all").permitAll()
+            .antMatchers(HttpMethod.GET,"/api/v1/keyword").permitAll()
+                // product
+            .antMatchers(HttpMethod.GET,"/api/v1/product/*").permitAll()
+            .antMatchers(HttpMethod.GET,"/api/v1/products").permitAll()
+                // password
             .antMatchers("/api/v1/account/reset-password/init").permitAll()
             .antMatchers("/api/v1/account/reset-password/finish").permitAll()
             .antMatchers("/api/v1/**").authenticated()

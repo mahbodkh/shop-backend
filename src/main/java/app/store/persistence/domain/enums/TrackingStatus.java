@@ -3,7 +3,7 @@ package app.store.persistence.domain.enums;
 public enum TrackingStatus {
 
     PREPARING,
-    REGISTERD,
+    REGISTERED,
     ONTRUCK,
     COMPLETE,
     DELIVERED;

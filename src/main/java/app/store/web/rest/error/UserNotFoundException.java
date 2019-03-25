@@ -10,4 +10,8 @@ public class UserNotFoundException extends AbstractThrowableProblem {
     public UserNotFoundException() {
         super(ErrorConstants.USER_NOT_FOUND_TYPE, "User not Found", Status.BAD_REQUEST);
     }
+
+    public UserNotFoundException(String value) {
+        super(ErrorConstants.USER_NOT_FOUND_TYPE, "User not Found:" + value, Status.BAD_REQUEST);
+    }
 }
