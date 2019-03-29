@@ -106,11 +106,11 @@ public class CategoryResource {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDto>> getAllCategories(Pageable pageable) {
+    public ResponseEntity<Page<CategoryDto>> getAllCategories(Pageable pageable) {
         log.debug("REST request to get all Category by pageable: {}", pageable);
         final Page<CategoryDto> page = categoryService.getAllCategories(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/category/");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
 
 }

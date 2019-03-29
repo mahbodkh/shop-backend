@@ -78,11 +78,11 @@ public class KeywordResource {
     }
 
     @GetMapping("/keyword/all")
-    public ResponseEntity<List<KeywordDto>> getKeywordByList(Pageable pageable) {
+    public ResponseEntity<Page<KeywordDto>> getKeywordByList(Pageable pageable) {
         log.debug("REST request to get all Keyword by pageable: {}", pageable);
         Page<KeywordDto> keywords = keywordService.getKeywords(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(keywords, "/api/keyword");
-        return new ResponseEntity<>(keywords.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(keywords, headers, HttpStatus.OK);
     }
 
 

@@ -53,8 +53,8 @@ public class TokenProvider {
         tokenValidityInMillisecondsForRememberMe = 1000 * 2592000L;
     }
 
-    public String createToken(String username, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(username);
+    public String createToken(String login, List<String> roles) {
+        Claims claims = Jwts.claims().setSubject(login);
         claims.put("roles", roles);
         Date now = new Date();
         Date validity = new Date(now.getTime() + tokenValidityInMilliseconds);

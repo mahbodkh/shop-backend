@@ -14,7 +14,7 @@ public class Keyword implements Serializable {
 
     @Id
     private ObjectId id;
-    @Field
+    @Field("lang_key")
     private String language;
     @Field
     private String name;

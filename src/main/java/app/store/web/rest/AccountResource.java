@@ -12,10 +12,12 @@ import app.store.service.UserService;
 import app.store.service.dto.PasswordChangeDto;
 import app.store.service.dto.UserDto;
 import app.store.web.rest.error.*;
+import app.store.web.rest.vm.AuthenticateVM;
 import app.store.web.rest.vm.KeyAndPasswordVM;
 import app.store.web.rest.vm.LoginVM;
 import app.store.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -62,15 +64,15 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        if (managedUserVM.getLogin() != null)
-            userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {
-                throw new LoginAlreadyUsedException();
-            });
-        if (managedUserVM.getEmail() != null)
+//        if (managedUserVM.getLogin() != null)
+//            userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {
+//                throw new LoginAlreadyUsedException();
+//            });
+        if (managedUserVM.getEmail() != null && (new EmailValidator().isValid(managedUserVM.getEmail(), null)))
             userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {
                 throw new EmailAlreadyUsedException();
             });
-        if (managedUserVM.getMobile() != null)
+        if (managedUserVM.getMobile() != null && managedUserVM.getMobile().matches("(^(9)[0-9]{9})"))
             userRepository.findOneByMobile(managedUserVM.getMobile()).ifPresent(u -> {
                 throw new MobileAlreadyUsedException();
             });
@@ -83,9 +85,10 @@ public class AccountResource {
     }
 
 
-    @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
+    @PostMapping("/activate")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void activateAccount(@Valid @RequestBody AuthenticateVM authenticateVM) {
+        Optional<User> user = userService.activateRegistration(authenticateVM.getLogin(), authenticateVM.getCode());
         if (!user.isPresent()) {
             throw new InternalServerErrorException("No user was found for this activation key");
         }
@@ -109,17 +112,32 @@ public class AccountResource {
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDto userDto) {
         final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDto.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
-            throw new EmailAlreadyUsedException();
+
+        if (new EmailValidator().isValid(userLogin, null)) {
+            userRepository.findOneByEmailIgnoreCase(userDto.getEmail()).ifPresent(u -> { u.getEmail().equalsIgnoreCase(userLogin);
+                throw new EmailAlreadyUsedException();
+            });
+
+            Optional<User> userByEmail = userRepository.findOneByEmailIgnoreCase(userLogin);
+            if (!userByEmail.isPresent())
+                throw new InternalServerErrorException("User could not be found");
+
+            userService.updateUserByEmail(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(),
+                    userDto.getLangKey(), userDto.getImageUrl());
         }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
-            throw new InternalServerErrorException("User could not be found");
+        if (userLogin.matches("(^(9)[0-9]{9})")) {
+            userRepository.findOneByMobileAndActivatedTrue(userDto.getMobile()).ifPresent(m -> { m.getMobile().equals(userLogin);
+                throw new MobileAlreadyUsedException();
+            });
+            Optional<User> userByMobile = userRepository.findOneByMobileAndActivatedTrue(userLogin);
+            if (!userByMobile.isPresent())
+                throw new InternalServerErrorException("User could not be found");
+
+            userService.updateUserByMobile(userDto.getFirstName(), userDto.getLastName(), userDto.getMobile(),
+                    userDto.getLangKey(), userDto.getImageUrl());
         }
-        userService.updateUser(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(),
-                userDto.getLangKey(), userDto.getImageUrl());
     }
+
 
     @PostMapping(path = "/account/change-password")
     public void changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {

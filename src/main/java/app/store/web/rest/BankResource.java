@@ -77,11 +77,11 @@ public class BankResource {
     }
 
     @GetMapping("/bank/all")
-    public ResponseEntity<List<BankDto>> getAllBank(Pageable pageable) {
+    public ResponseEntity<Page<BankDto>> getAllBank(Pageable pageable) {
         log.debug("REST request to get all PaymentMethod by pageable: {}", pageable);
         final Page<BankDto> bank = bankService.getAllBank(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(bank, "/api/banks");
-        return new ResponseEntity<>(bank.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(bank, headers, HttpStatus.OK);
     }
 
 }

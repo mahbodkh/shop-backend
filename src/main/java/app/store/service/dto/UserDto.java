@@ -3,8 +3,11 @@ package app.store.service.dto;
 import app.store.persistence.domain.Authority;
 import app.store.persistence.domain.User;
 import app.store.service.util.TextHelper;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.HashSet;
@@ -20,21 +23,25 @@ public class UserDto {
 
     private String id;
     @NotNull
-    private Long mobile;
+    @Pattern(regexp = "^(9)[0-9]{9}")
+    @Size(min = 10, max = 10)
+    private String mobile;
+    @JsonIgnore
     private String login;
-//    @Size(max = 50)
+    @Size(max = 50)
     private String firstName;
-//    @Size(max = 50)
+    @Size(max = 50)
     private String lastName;
+    @JsonIgnore
     private boolean activated = false;
-    //    @Email
-//    @Size(min = 5, max = 254)
+    @Email
+    @Size(min = 5, max = 254)
     private String email;
-//    @Size(min = 2, max = 6)
+    @Size(min = 2, max = 6)
     private String gender;
-//    @Size(min = 2, max = 6)
+    @Size(min = 2, max = 6)
     private String langKey;
-//    @Size(max = 256)
+    @Size(max = 256)
     private String imageUrl;
     private String cardNumber;
     private List<AddressDto> addresses;
@@ -73,11 +80,11 @@ public class UserDto {
         this.id = id;
     }
 
-    public Long getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Long mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 

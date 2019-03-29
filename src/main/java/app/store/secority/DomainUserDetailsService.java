@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
-
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     private final UserRepository userRepository;
@@ -43,9 +42,9 @@ public class DomainUserDetailsService implements UserDetailsService {
         }
 
         if (login.matches("(^(9)[0-9]{9})")) {
-            Optional<User> userByMobileFromDatabase = userRepository.findOneByMobile(Long.valueOf(TextHelper.changeDigitsToEnglish(login)));
+            Optional<User> userByMobileFromDatabase = userRepository.findOneByMobile(TextHelper.changeDigitsToEnglish(login));
             return userByMobileFromDatabase.map(user -> createSpringSecurityUser(login, user))
-                    .orElseThrow(() -> new MobileNotFoundException("User with mobile " + login + "was not found in the database"));
+                    .orElseThrow(() -> new MobileNotFoundException("User with mobile " + login + " was not found in the database"));
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);

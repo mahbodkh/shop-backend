@@ -42,3 +42,8 @@ spring:
       max-file-size: 5MB
       max-request-size: 10MB
 #      location: /images
+
+#logging:
+#  level:
+#      app.store: info
+#      app.store.web.rest: debug

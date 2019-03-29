@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +57,9 @@ public class FileService {
                     return media;
                 })
                 .collect(Collectors.toList());
+    }
+    public void uploadProduct(List<MultipartFile> files, String productId) {
+
     }
 
 

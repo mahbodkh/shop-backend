@@ -24,7 +24,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Pattern(regexp = "^(9)[0-9]{9}")
     @Indexed(unique = true, sparse = true)
-    private Long mobile;
+    private String mobile;
 
     @Size(min = 1, max = 50)
     @Indexed(unique = true, sparse = true)
@@ -93,11 +93,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Long mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 

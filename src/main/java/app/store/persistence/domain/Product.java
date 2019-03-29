@@ -36,6 +36,8 @@ public class Product extends AbstractAuditingEntity implements Serializable {
     @Field
     private Integer sold = 0;
     @Field
+    private Long visit;
+    @Field
     private String cover;
     @Field
     private Dimension dimension;
@@ -125,6 +127,14 @@ public class Product extends AbstractAuditingEntity implements Serializable {
         this.sold = sold;
     }
 
+    public Long getVisit() {
+        return visit;
+    }
+
+    public void setVisit(Long visit) {
+        this.visit = visit;
+    }
+
     public String getCover() {
         return cover;
     }
@@ -207,6 +217,7 @@ public class Product extends AbstractAuditingEntity implements Serializable {
                 ", vendor=" + vendor +
                 ", price=" + price +
                 ", sold=" + sold +
+                ", visit=" + visit +
                 ", cover='" + cover + '\'' +
                 ", dimension=" + dimension +
                 ", mediaList=" + mediaList +

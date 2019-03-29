@@ -76,11 +76,11 @@ public class VendorResource {
     }
 
     @GetMapping("/vendor/all")
-    public ResponseEntity<List<VendorDto>> getAllVendor(Pageable pageable) {
+    public ResponseEntity<Page<VendorDto>> getAllVendor(Pageable pageable) {
         log.debug("REST request to get all Vendor by pageable: {}", pageable);
         final Page<VendorDto> vendor = vendorService.getAllVendor(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(vendor, "/api/vendors");
-        return new ResponseEntity<>(vendor.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(vendor, headers, HttpStatus.OK);
     }
 
 }

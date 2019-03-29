@@ -19,17 +19,27 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
+    Optional<User> findByMobileAndActivationKey(String mobile, String activationKey);
+
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
 
     Optional<User> findOneByResetKey(String resetKey);
 
     Optional<User> findOneByEmailIgnoreCase(String email);
 
+    Optional<User> findOneByEmailIgnoreCaseAndActivationKey(String email, String activationKey);
+
     Optional<User> findOneByLogin(String login);
 
-    Optional<User> findOneByMobile(Long mobile);
+    Optional<User> findOneByMobile(String mobile);
+
+    Optional<User> findOneByMobileAndActivatedFalse(String mobile);
+
+    Optional<User> findOneByMobileAndActivatedTrue(String mobile);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
 
     Optional<User> findByLogin(String username);
+
+
 }

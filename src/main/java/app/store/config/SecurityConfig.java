@@ -3,8 +3,8 @@ package app.store.config;
 import app.store.secority.AuthoritiesConstants;
 import app.store.secority.jwt.JWTConfigurer;
 import app.store.secority.jwt.TokenProvider;
-import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,12 +19,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
@@ -101,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
-            .ignoring()
+                .ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .antMatchers("/app/**/*.{js,html}")
                 .antMatchers("/i18n/**")
@@ -112,59 +109,69 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance())
+                .withUser("000000000").password("124800")
+                .authorities(AuthoritiesConstants.ADMIN)
+            .and()
+                .withUser("admin").password("admin")
+                .roles("ADMIN");
+    }
+
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-            .logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .logoutSuccessUrl("/api/v1/logout").deleteCookies("JSESSIONID")
-            .invalidateHttpSession(true)
-        .and()
-            .headers()
-            .frameOptions()
-            .sameOrigin().httpStrictTransportSecurity()
-            .includeSubDomains(true)
-            .maxAgeInSeconds(604800);
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/api/v1/logout").deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin().httpStrictTransportSecurity()
+                .includeSubDomains(true)
+                .maxAgeInSeconds(604800);
 //            .disable()
 
         http
-            .csrf()
-            .ignoringAntMatchers("/api/**")
-            .disable()
+                .csrf()
+                .ignoringAntMatchers("/api/**")
+                .disable()
 //            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 //            .exceptionHandling()
 //            .authenticationEntryPoint(problemSupport)
 //            .accessDeniedHandler(problemSupport)
 //        .and()
-            .cors()
-        .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
+                .cors()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 // account
-            .authorizeRequests()
-            .antMatchers("/api/v1/register").permitAll()
-            .antMatchers("/api/v1/activate").permitAll()
-            .antMatchers("/api/v1/authenticate").permitAll()
+                .authorizeRequests()
+                .antMatchers("/api/v1/register").permitAll()
+                .antMatchers("/api/v1/activate").permitAll()
+                .antMatchers("/api/v1/authenticate").permitAll()
                 // category
-            .antMatchers("/api/v1/category/sub").permitAll()
-            .antMatchers("/api/v1/category/root").permitAll()
-            .antMatchers("/api/v1/category").permitAll()
-            .antMatchers("/api/v1/categories").permitAll()
+                .antMatchers("/api/v1/category/sub").permitAll()
+                .antMatchers("/api/v1/category/root").permitAll()
+                .antMatchers("/api/v1/category").permitAll()
+                .antMatchers("/api/v1/categories").permitAll()
                 // keyword
-            .antMatchers("/api/v1/keyword/all").permitAll()
-            .antMatchers(HttpMethod.GET,"/api/v1/keyword").permitAll()
+                .antMatchers("/api/v1/keyword/all").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/keyword").permitAll()
                 // product
-            .antMatchers(HttpMethod.GET,"/api/v1/product/*").permitAll()
-            .antMatchers(HttpMethod.GET,"/api/v1/products").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/product/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
                 // password
-            .antMatchers("/api/v1/account/reset-password/init").permitAll()
-            .antMatchers("/api/v1/account/reset-password/finish").permitAll()
-            .antMatchers("/api/v1/**").authenticated()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-        .and()
-            .apply(securityConfigurerAdapter());
+                .antMatchers("/api/v1/account/reset-password/init").permitAll()
+                .antMatchers("/api/v1/account/reset-password/finish").permitAll()
+                .antMatchers("/api/v1/**").authenticated()
+                .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                .and()
+                .apply(securityConfigurerAdapter());
     }
 
     private JWTConfigurer securityConfigurerAdapter() {

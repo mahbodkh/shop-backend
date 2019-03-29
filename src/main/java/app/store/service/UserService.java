@@ -13,7 +13,9 @@ import app.store.service.dto.UserDto;
 import app.store.service.mapper.UserMapper;
 import app.store.service.util.RandomUtil;
 import app.store.web.rest.error.InvalidPasswordException;
+import app.store.web.rest.error.UserNotFoundException;
 import org.bson.types.ObjectId;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -55,7 +57,7 @@ public class UserService {
         return userRepository.existsById(new ObjectId(userId));
     }
 
-    public Optional<User> isMobileExists(Long mobile) {
+    public Optional<User> isMobileExists(String mobile) {
         return userRepository.findOneByMobile(mobile);
     }
 
@@ -135,17 +137,16 @@ public class UserService {
         });
     }
 
-    public Optional<User> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
-        return userRepository.findOneByActivationKey(key)
-                .map(user -> {
-                    // activate given user for the registration key.
-                    user.setActivated(true);
-                    user.setActivationKey(null);
-                    userRepository.save(user);
-                    log.debug("Activated user: {}", user);
-                    return user;
-                });
+    public Optional<User> activateRegistration(String login, String key) {
+        log.debug("Activating user for activation key: {} and mobile: {}", key, login);
+        return userRepository.findByMobileAndActivationKey(login, key).map(user -> {
+            // activate given user for the registration key.
+            user.setActivated(true);
+            user.setActivationKey(null);
+            userRepository.save(user);
+            log.debug("Activated user by mobile: {}", user);
+            return user;
+        });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
@@ -160,17 +161,17 @@ public class UserService {
                 });
     }
 
-    public Optional<UserDto> requestPasswordReset(Long mobile) {
-        return userRepository.findOneByMobile(mobile)
-                .filter(User::isActivated)
-                .map(user -> {
-                    user.setResetKey(RandomUtil.generateResetKey());
-                    user.setResetDate(Instant.now());
-                    User save = userRepository.save(user);
-                    log.debug("The password reset (by mobile): {}", user);
-                    return save;
-                }).map(userMapper::toDto);
-    }
+//    public Optional<UserDto> requestPasswordReset(String mobile) {
+//        return userRepository.findOneByMobile(mobile)
+//                .filter(User::isActivated)
+//                .map(user -> {
+//                    user.setResetKey(RandomUtil.generateResetKey());
+//                    user.setResetDate(Instant.now());
+//                    User save = userRepository.save(user);
+//                    log.debug("The password reset (by mobile): {}", user);
+//                    return save;
+//                }).map(userMapper::toDto);
+//    }
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
@@ -203,7 +204,7 @@ public class UserService {
 
     @Transactional
     public User loadUserByMobile(String mobile) {
-        User user = userRepository.findOneByMobile(Long.valueOf(mobile))
+        User user = userRepository.findOneByMobile(mobile)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User Not Found with -> mobile or email : " + mobile)
                 );
@@ -260,11 +261,11 @@ public class UserService {
     }
 
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByMobile);
     }
 
 
-    public Optional<UserDto> updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public Optional<UserDto> updateUserByEmail(String firstName, String lastName, String email, String langKey, String imageUrl) {
         return Optional.of(userRepository.findOneByEmailIgnoreCase(email))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -283,8 +284,8 @@ public class UserService {
                 }).map(userMapper::toDto);
     }
 
-    public Optional<UserDto> updateUser(String firstName, String lastName, Long mobile, String langKey, String imageUrl) {
-        return Optional.of(userRepository.findOneByMobile(mobile))
+    public Optional<UserDto> updateUserByMobile(String firstName, String lastName, String mobile, String langKey, String imageUrl) {
+        return Optional.of(userRepository.findOneByMobileAndActivatedTrue(mobile))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(user -> {
@@ -302,5 +303,26 @@ public class UserService {
                 }).map(userMapper::toDto);
     }
 
+    private static Boolean isUsernameMobileOrEmail(String principle) {
+        if (principle.matches("(^(9)[0-9]{9})")) {
+            return true;
+        } else if (new EmailValidator().isValid(principle, null)) {
+            return false;
+        } else
+            return null;
+    }
 
+
+    public Optional<User> getUsername(String principle) {
+        if (principle.matches("(^(9)[0-9]{9})")) {
+            return userRepository.findOneByMobileAndActivatedTrue(principle);
+        } else if (new EmailValidator().isValid(principle, null)) {
+            return userRepository.findOneByEmailIgnoreCase(principle);
+        } else
+            throw new UserNotFoundException();
+    }
+
+    public Optional<User> getUserIdByPrinciple(String username) {
+        return null;
+    }
 }

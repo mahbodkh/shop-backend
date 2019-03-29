@@ -41,7 +41,7 @@ public class Startup implements ApplicationListener<ContextRefreshedEvent> {
         Set<Authority> anonymousAuthoritySet = new HashSet<>();
 
         User anonymous = new User();
-        anonymous.setMobile(0000000000L);
+        anonymous.setMobile("0000000000");
         anonymous.setActivated(true);
         //
         anonymousAuthority.setName("ROLE_ANONYMOUS");
@@ -56,7 +56,7 @@ public class Startup implements ApplicationListener<ContextRefreshedEvent> {
         Authority systemAuthority = new Authority();
         Set<Authority> systemAuthoritySet = new HashSet<>();
         User system = new User();
-        system.setMobile(1111111111L);
+        system.setMobile("1111111111");
         system.setLogin("001");
         system.setLangKey("EN");
         system.setActivated(true);
@@ -70,7 +70,8 @@ public class Startup implements ApplicationListener<ContextRefreshedEvent> {
 
         User admin = new User();
         admin.setLogin("admin");
-        admin.setMobile(9121234567L);
+        admin.setPassword("admin");
+        admin.setMobile("9121234567");
         admin.setLangKey("EN");
         adminAuthority.setName("ROLE_ADMIN");
         admin.setActivated(true);

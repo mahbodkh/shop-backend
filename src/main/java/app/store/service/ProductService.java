@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,14 +31,16 @@ public class ProductService {
     private final KeywordRepository keywordRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
+    private final UserLogService userLogService;
 
 
-    public ProductService(ProductRepository productRepository, KeywordRepository keywordRepository, CategoryRepository categoryRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, KeywordRepository keywordRepository, CategoryRepository categoryRepository, ProductMapper productMapper, UserLogService userLogService) {
 
         this.productRepository = productRepository;
         this.keywordRepository = keywordRepository;
         this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
+        this.userLogService = userLogService;
     }
 
     public boolean isExists(String productId) {
@@ -246,6 +249,15 @@ public class ProductService {
                 .map(productMapper::toDto);
     }
 
+    @Async
+    public void setCountVisitor(String productId) {
+        productRepository.findOneById(new ObjectId(productId)).ifPresent(product -> {
+            product.setVisit((product.getVisit() == null) || (product.getVisit() == 0) ? 1 : product.getVisit() + 1);
+            productRepository.save(product);
+        });
+
+    }
+
     public Optional<Product> getProductWithoutMapping(String id) {
         return Optional.of(productRepository.findOneById(new ObjectId(id)))
                 .filter(Optional::isPresent)
@@ -330,6 +342,11 @@ public class ProductService {
 
     public List<Product> getProductFullTextSearch(String text) {
         return productRepository.onTextValueQuery(text);
+    }
+
+    public Page<ProductDto> getAllProductByMaxVisitCount(Pageable pageable) {
+        return productRepository.findAllByOrderByVisitDesc(pageable)
+                .map(productMapper::toDto);
     }
 
 }

@@ -1,9 +1,5 @@
 package app.store.secority;
 
-//import org.springframework.security.core.context.SecurityContext;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,12 +29,6 @@ public final class SecurityUtils {
                     }
                     return null;
                 });
-    }
-
-    public static Optional<Long> getCurrentUserMobile() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-
-        return Optional.empty();
     }
 
     /**
