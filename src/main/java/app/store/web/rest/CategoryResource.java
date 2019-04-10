@@ -42,7 +42,7 @@ public class CategoryResource {
             throw new CategoryAlreadyUsedException();
         }
         String categoryId = categoryService.createCategory(categoryDto);
-        return ResponseEntity.created(new URI("/api/category/" + categoryId))
+        return ResponseEntity.created(new URI("/category/" + categoryId))
                 .headers(HeaderUtil.createAlert("category.created", "isLogin or "))
                 .body(categoryId);
     }
@@ -92,7 +92,7 @@ public class CategoryResource {
             throw new CategoryNotFoundException();
         else {
             Optional<CategoryDto> result = categoryService.updateCategory(categoryDto, id);
-            return ResponseEntity.created(new URI("/api/category/" + result))
+            return ResponseEntity.created(new URI("/category/" + result.get().getId()))
                     .headers(HeaderUtil.createAlert("category.created", ""))
                     .body(result.get());
         }
@@ -109,7 +109,7 @@ public class CategoryResource {
     public ResponseEntity<Page<CategoryDto>> getAllCategories(Pageable pageable) {
         log.debug("REST request to get all Category by pageable: {}", pageable);
         final Page<CategoryDto> page = categoryService.getAllCategories(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/category/");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/category/");
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
 

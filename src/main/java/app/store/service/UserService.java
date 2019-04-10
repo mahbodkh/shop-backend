@@ -83,6 +83,7 @@ public class UserService {
     }
 
     public Optional<User> getUser(String id) {
+        log.debug("get User by id: {}", id);
         return Optional.of(userRepository
                 .findOneById(new ObjectId(id)))
                 .filter(Optional::isPresent)
@@ -139,7 +140,7 @@ public class UserService {
 
     public Optional<User> activateRegistration(String login, String key) {
         log.debug("Activating user for activation key: {} and mobile: {}", key, login);
-        return userRepository.findByMobileAndActivationKey(login, key).map(user -> {
+        return userRepository.findOneByMobileAndActivationKeyAndActivatedFalse(login, key).map(user -> {
             // activate given user for the registration key.
             user.setActivated(true);
             user.setActivationKey(null);

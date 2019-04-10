@@ -28,6 +28,9 @@ public interface ProductRepository extends MongoRepository<Product, ObjectId>, P
     CompletableFuture<List<Product>> findAllByCategories(ObjectId id);
 
     @Async
+    Page<Product> findAllByCategories(ObjectId id, Pageable pageable);
+
+    @Async
     @Query(value = "{ $text: { $search: ?0 } }")
     CompletableFuture<List<Product>> findTextSearch(String value);
 

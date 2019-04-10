@@ -2,8 +2,15 @@ package app.store.service.dto.enums;
 
 public enum InvoiceStatusDto {
 
-    CHECKOUT,
-    ;
+    APPROVED,
+    CANCEL,
+    ENTERED,
+    HOLD,
+    PAID,
+    PENDING_REVERSAL,
+    REVERSED,
+    SCHEDULED,
+    WAITING_ON_APPROVAL;
 
     InvoiceStatusDto() {
     }

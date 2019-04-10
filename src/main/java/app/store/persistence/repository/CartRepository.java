@@ -8,9 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CartRepository extends MongoRepository<Cart, ObjectId> {
 
-    Page<Cart> findAllByUserIdAndStatus(Pageable pageable, ObjectId userId, CartStatus status);
+    Optional<Cart> findOneByIdAndStatus(ObjectId id, CartStatus status);
+
+    Optional<Cart> findOneByUserIdAndStatus(ObjectId userId, CartStatus status);
+
+    Page<Cart> findAllByUserIdAndStatus(ObjectId userId, CartStatus status, Pageable pageable);
 
 }

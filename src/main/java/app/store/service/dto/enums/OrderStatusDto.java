@@ -2,6 +2,7 @@ package app.store.service.dto.enums;
 
 public enum OrderStatusDto {
 
+    CREATED,
     ISSUED,
     SUSPEND,
     DELIVERED,

@@ -5,7 +5,8 @@ public enum CartStatus {
     ACTIVE,
     COMPLETE,
     SUSPEND,
-    DEACTIVE,
+    DEACTIVATED,
+    FINISH
     ;
 
     CartStatus() {

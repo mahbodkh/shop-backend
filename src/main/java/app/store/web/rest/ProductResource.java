@@ -60,7 +60,7 @@ public class ProductResource {
         String productId = productService.createProduct(productMultipartFileVM);
         fileService.uploadProduct(productMultipartFileVM.getFile(), productId);
 
-        return ResponseEntity.created(new URI("/api/product/" + productId))
+        return ResponseEntity.created(new URI("/product/" + productId))
                 .headers(HeaderUtil.createAlert("product.created", productId))
                 .body(productId);
     }
@@ -130,7 +130,7 @@ public class ProductResource {
     public ResponseEntity<Page<ProductDto>> getAllProducts(Pageable pageable) {
         log.debug("REST request to get all Product by pageable: {}", pageable);
         final Page<ProductDto> page = productService.getAllProducts(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/products");
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
 
@@ -138,9 +138,18 @@ public class ProductResource {
     public ResponseEntity<Page<ProductDto>> getAllProductsByMaxVisit(Pageable pageable) {
         log.debug("REST request to get all product by max visit pageable: {}", pageable);
         final Page<ProductDto> page = productService.getAllProductByMaxVisitCount(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/product/visit");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/product/visit");
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/product/category/{id}")
+    public ResponseEntity<Page<ProductDto>> getAllProductsByCategoryId(@Valid @RequestParam("id") String categoryId, Pageable pageable) {
+        log.debug("REST request to get all product by category pageable: {} and category id: {} ", pageable, categoryId);
+        final Page<ProductDto> page = productService.getAllProductByCategoryId(categoryId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/product/category/" + categoryId);
+        return new ResponseEntity<>(page, headers, HttpStatus.OK);
+    }
+
 
     @PostMapping("/uploadFile")
     public void uploadFile(@RequestParam("file") MultipartFile file) {

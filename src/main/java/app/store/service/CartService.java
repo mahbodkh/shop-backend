@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class CartService {
     }
 
     //todo it must test
-    public Optional<String> saveCart(CartDto cartDto) {
+    public Optional<String> createCart(CartDto cartDto) {
         List<ProductCart> productCarts = new ArrayList<>();
         if (cartDto.getProductCarts() != null)
             cartDto.getProductCarts().forEach(pc -> {
@@ -53,6 +54,8 @@ public class CartService {
                 .map(cart -> {
                     cart.setProductCarts(productCarts);
 //                    cart.setTotal(getTotalPrice(productCarts));
+
+                    cart.setStatus(CartStatus.ACTIVE);
                     Cart result = cartRepository.save(cart);
                     log.debug("Save Information for Cart: {}", cartDto);
                     return result.getId().toString();
@@ -65,7 +68,7 @@ public class CartService {
     }
 
     public Optional<CartDto> getCart(String id) {
-        return Optional.of(cartRepository.findById(new ObjectId(id)))
+        return Optional.of(cartRepository.findOneByIdAndStatus(new ObjectId(id), CartStatus.ACTIVE))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(cart -> {
@@ -132,15 +135,27 @@ public class CartService {
     }
 
     public Page<CartDto> getAllCart(String userId, Pageable pageable) {
-        Page<Cart> allByUserIdAndStatus = cartRepository.findAllByUserIdAndStatus(pageable, new ObjectId(userId), CartStatus.COMPLETE);
+        Page<Cart> allByUserIdAndStatus = cartRepository.findAllByUserIdAndStatus(new ObjectId(userId), CartStatus.FINISH, pageable);
         List<CartDto> cartDtos = cartMapper.toDto(allByUserIdAndStatus.getContent());
         return new PageImpl<CartDto>(cartDtos);
     }
 
 
-    public Page<CartDto> getAllCartByStatus(String userId, CartStatus status, Pageable pageable) {
-        return cartRepository.findAllByUserIdAndStatus(pageable, new ObjectId(userId), status)
-                .map(cartMapper::toDto);
+    @Async
+    public void deleteBySystem(String userId) {
+        cartRepository.findOneByUserIdAndStatus(new ObjectId(userId), CartStatus.COMPLETE)
+                .ifPresent(cart -> {
+                    cart.setStatus(CartStatus.FINISH);
+                    cartRepository.save(cart);
+                });
     }
 
+//    public Page<CartDto> getAllCartByStatus(String userId, CartStatus status, Pageable pageable) {
+//        return cartRepository.findAllByUserIdAndStatus(pageable, new ObjectId(userId), status)
+//                .map(cartMapper::toDto);
+//    }
+
+//    public Optional<Cart> getCartByUserIdAndStatus(ObjectId userId, CartStatus status) {
+//        return cartRepository.findOne();
+//    }
 }

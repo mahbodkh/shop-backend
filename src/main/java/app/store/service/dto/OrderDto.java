@@ -1,6 +1,7 @@
 package app.store.service.dto;
 
 import app.store.service.dto.enums.OrderStatusDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -14,11 +15,13 @@ public class OrderDto {
     private String id;
     @NotNull
     private String userId;
+    @JsonIgnore
     private Instant checkout;
     @NotNull
     private List<ProductCartDto> productCartDtos = new ArrayList<>();
     private List<TrackingDto> tracking = new ArrayList<>();
     private String paymentId;
+    private Boolean cashOnDelivery;
     private String invoiceId;
     private OrderStatusDto status;
     private ShippingDto shipping;
@@ -69,6 +72,14 @@ public class OrderDto {
 
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Boolean getCashOnDelivery() {
+        return cashOnDelivery;
+    }
+
+    public void setCashOnDelivery(Boolean cashOnDelivery) {
+        this.cashOnDelivery = cashOnDelivery;
     }
 
     public String getInvoiceId() {

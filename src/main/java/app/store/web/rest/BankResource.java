@@ -53,7 +53,7 @@ public class BankResource {
         }
         String bankId = bankService.createBank(bankDto).get();
 
-        return ResponseEntity.created(new URI("/api/bank/" + bankId))
+        return ResponseEntity.created(new URI("/bank/" + bankId))
                 .headers(HeaderUtil.createAlert("bank.created", bankId))
                 .body(bankId);
     }
@@ -64,7 +64,7 @@ public class BankResource {
         if (!bankService.isExistById(id))
             throw new BankNotFoundException();
         BankDto result = bankService.updateBank(bankDto, id).get();
-        return ResponseEntity.created(new URI("/api/bank/" + result.getId()))
+        return ResponseEntity.created(new URI("/bank/" + result.getId()))
                 .headers(HeaderUtil.createAlert("bank.created", ""))
                 .body(result);
     }
@@ -80,7 +80,7 @@ public class BankResource {
     public ResponseEntity<Page<BankDto>> getAllBank(Pageable pageable) {
         log.debug("REST request to get all PaymentMethod by pageable: {}", pageable);
         final Page<BankDto> bank = bankService.getAllBank(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(bank, "/api/banks");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(bank, "/banks");
         return new ResponseEntity<>(bank, headers, HttpStatus.OK);
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@org.springframework.data.mongodb.core.mapping.Document(collection = "orders")
+@org.springframework.data.mongodb.core.mapping.Document(collection = "user_order")
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -24,6 +24,8 @@ public class Order implements Serializable {
     private List<Tracking> tracking = new ArrayList<>();
     @Field
     private ObjectId paymentId;
+    @Field
+    private Boolean cashOnDelivery;
     @Field
     private ObjectId invoiceId;
     @Field
@@ -71,6 +73,14 @@ public class Order implements Serializable {
         this.paymentId = paymentId;
     }
 
+    public Boolean getCashOnDelivery() {
+        return cashOnDelivery;
+    }
+
+    public void setCashOnDelivery(Boolean cashOnDelivery) {
+        this.cashOnDelivery = cashOnDelivery;
+    }
+
     public ObjectId getInvoiceId() {
         return invoiceId;
     }
@@ -116,6 +126,7 @@ public class Order implements Serializable {
                 ", checkout=" + checkout +
                 ", tracking=" + tracking +
                 ", paymentId=" + paymentId +
+                ", cashOnDelivery=" + cashOnDelivery +
                 ", invoiceId=" + invoiceId +
                 ", status=" + status +
                 ", shipping=" + shipping +

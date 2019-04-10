@@ -52,7 +52,7 @@ public class UserResource {
         UserDto result = userService.createUser(userDto).get();
         //todo send email and sms (notification)
 
-        return ResponseEntity.created(new URI("/api/user/" + result.getId()))
+        return ResponseEntity.created(new URI("/user/" + result.getId()))
                 .headers(HeaderUtil.createAlert("userManagement.created", result.getLogin()))
                 .build();
     }
@@ -99,7 +99,7 @@ public class UserResource {
     public ResponseEntity<Page<UserDto>> getAllUsers(Pageable pageable) {
         log.debug("REST request to get all User by pageable: {}", pageable);
         final Page<UserDto> page = userService.getAllUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/users");
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
 

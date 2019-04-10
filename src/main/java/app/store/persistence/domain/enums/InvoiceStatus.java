@@ -2,8 +2,15 @@ package app.store.persistence.domain.enums;
 
 public enum InvoiceStatus {
 
-    CHECKOUT,
-    ;
+    APPROVED,
+    CANCEL,
+    ENTERED,
+    HOLD,
+    PAID,
+    PENDING_REVERSAL,
+    REVERSED,
+    SCHEDULED,
+    WAITING_ON_APPROVAL;
 
 
     InvoiceStatus() {

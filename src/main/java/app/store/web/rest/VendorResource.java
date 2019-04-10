@@ -51,7 +51,7 @@ public class VendorResource {
         }
         String vendorId = vendorService.createVendor(vendorDto).get();
 
-        return ResponseEntity.created(new URI("/api/vendor/" + vendorId))
+        return ResponseEntity.created(new URI("/vendor/" + vendorId))
                 .headers(HeaderUtil.createAlert("vendor.created", vendorId))
                 .body(vendorId);
     }
@@ -63,7 +63,7 @@ public class VendorResource {
             throw new VendorNotFoundException();
 
         VendorDto result = vendorService.updateVendor(vendorDto, id).get();
-        return ResponseEntity.created(new URI("/api/vendor/" + result.getId()))
+        return ResponseEntity.created(new URI("/vendor/" + result.getId()))
                 .headers(HeaderUtil.createAlert("vendor.created", ""))
                 .body(result);
     }
@@ -79,7 +79,7 @@ public class VendorResource {
     public ResponseEntity<Page<VendorDto>> getAllVendor(Pageable pageable) {
         log.debug("REST request to get all Vendor by pageable: {}", pageable);
         final Page<VendorDto> vendor = vendorService.getAllVendor(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(vendor, "/api/vendors");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(vendor, "/vendors");
         return new ResponseEntity<>(vendor, headers, HttpStatus.OK);
     }
 

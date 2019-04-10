@@ -2,7 +2,7 @@ package app.store.persistence.domain.enums;
 
 public enum OrderStatus {
 
-
+    CREATED,
     ISSUED,
     SUSPEND,
     DELIVERED,

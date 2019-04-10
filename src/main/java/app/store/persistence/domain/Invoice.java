@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,8 @@ public class Invoice extends AbstractAuditingEntity implements Serializable {
     private Double net = 0d;
     @Field
     private Double deliveryCost = 0d;
+    @Field
+    private Instant persistedTime;
 
     public ObjectId getId() {
         return id;
@@ -120,6 +123,14 @@ public class Invoice extends AbstractAuditingEntity implements Serializable {
         this.deliveryCost = deliveryCost;
     }
 
+    public Instant getPersistedTime() {
+        return persistedTime;
+    }
+
+    public void setPersistedTime(Instant persistedTime) {
+        this.persistedTime = persistedTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,6 +157,7 @@ public class Invoice extends AbstractAuditingEntity implements Serializable {
                 ", productCarts=" + productCarts +
                 ", net=" + net +
                 ", deliveryCost=" + deliveryCost +
+                ", persistedTime=" + persistedTime +
                 '}';
     }
 }

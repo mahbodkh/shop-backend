@@ -47,16 +47,16 @@ public class OrderResource {
             throw new UserNotFoundException();
         }
 
-        String orderId = orderService.saveOrder(orderDto).get();
+        String orderId = orderService.createOrder(orderDto).get();
 
 
-        return ResponseEntity.created(new URI("/api/order/" + orderId))
+        return ResponseEntity.created(new URI("/order/" + orderId))
                 .headers(HeaderUtil.createAlert("order.created", orderId))
                 .body(orderId);
     }
 
     @PutMapping("/order/{id}")
-    public ResponseEntity<OrderDto> updateProduct(@Valid @RequestBody OrderDto orderDto, @Valid @PathVariable String id) {
+    public ResponseEntity<OrderDto> updateProduct(@Valid @RequestBody OrderDto orderDto, @Valid @PathVariable("id") String id) {
         log.debug("REST request to update OrderDto : {} with id : {}", orderDto, id);
         if (!orderService.findById(id).isPresent()) {
             throw new OrderNotFoundException();
@@ -65,4 +65,24 @@ public class OrderResource {
         return ResponseUtil.wrapOrNotFound(result,
                 HeaderUtil.createAlert("order.updated", result.get().getId()));
     }
+
+    @GetMapping("/order/{id}")
+    public ResponseEntity<OrderDto> getOrder(@Valid @PathVariable("id") String id) {
+        log.debug("REST request to get Order: {}", id);
+        Optional<OrderDto> order = orderService.findById(id);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createAlert("order.get", "isLogin or "))
+                .body(order.get());
+    }
+
+    @GetMapping("/order/user/{id}")
+    public ResponseEntity<OrderDto> getOrderByUser(@Valid @PathVariable("id") String userId) {
+        log.debug("REST request to get userId: {}", userId);
+        Optional<OrderDto> order = orderService.loadByUser(userId);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createAlert("order.get", "isLogin or "))
+                .body(order.get());
+    }
+
+
 }

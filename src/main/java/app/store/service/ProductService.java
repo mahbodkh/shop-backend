@@ -349,4 +349,9 @@ public class ProductService {
                 .map(productMapper::toDto);
     }
 
+    public Page<ProductDto> getAllProductByCategoryId(String categoryId, Pageable pageable) {
+        categoryRepository.findOneById(new ObjectId(categoryId)).orElseThrow(CategoryNotFoundException::new);
+        return productRepository.findAllByCategories(new ObjectId(categoryId), pageable)
+                .map(productMapper::toDto);
+    }
 }

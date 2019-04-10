@@ -3,6 +3,7 @@ package app.store.service.dto;
 import app.store.service.dto.enums.InvoiceStatusDto;
 
 import javax.validation.constraints.Size;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class InvoiceDto {
     private InvoiceStatusDto status;
     private Double deliveryCost = 0d;
     private List<ProductCartDto> productCarts = new ArrayList<>();
+    private Instant persistedTime;
 
     public String getId() {
         return id;
@@ -104,5 +106,13 @@ public class InvoiceDto {
 
     public void setProductCarts(List<ProductCartDto> productCarts) {
         this.productCarts = productCarts;
+    }
+
+    public Instant getPersistedTime() {
+        return persistedTime;
+    }
+
+    public void setPersistedTime(Instant persistedTime) {
+        this.persistedTime = persistedTime;
     }
 }

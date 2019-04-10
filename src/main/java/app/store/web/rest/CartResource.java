@@ -57,15 +57,15 @@ public class CartResource {
 //        } else if (!cartService.isExists(cartDto)) {
 //            throw new CartNotFoundException();
         }
-        String cartId = cartService.saveCart(cartDto).get();
-        return ResponseEntity.created(new URI("/api/cart/" + cartId))
+        String cartId = cartService.createCart(cartDto).get();
+        return ResponseEntity.created(new URI("/cart/" + cartId))
                 .headers(HeaderUtil.createAlert("cart.created", ""))
                 .body(cartId);
 
     }
 
     @GetMapping("/cart/{id}")
-    public ResponseEntity<CartDto> getCart(@PathVariable String id) {
+    public ResponseEntity<CartDto> getCart(@Valid @PathVariable("id") String id) {
         log.debug("REST request to get Cart : {}", id);
         Optional<CartDto> cart = cartService.getCart(id);
         return ResponseEntity.ok()
@@ -74,7 +74,7 @@ public class CartResource {
     }
 
     @PutMapping("/cart/{id}")
-    public ResponseEntity<CartDto> updateCart(@Valid @RequestBody CartDto cartDto, @PathVariable String id) {
+    public ResponseEntity<CartDto> updateCart(@Valid @RequestBody CartDto cartDto, @Valid @PathVariable("id") String id) {
         log.debug("REST request to update Cart : {} with id : {}", cartDto, id);
         if (id == null)
             throw new BadRequestAlertException("Card ID is null", "CartDto", "updateCart");
@@ -97,11 +97,11 @@ public class CartResource {
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("cart.deleted", "")).build();
     }
 
-    @GetMapping("/carts/{id}")
-    public ResponseEntity<List<CartDto>> getAllCards(@Valid @PathVariable String userId, @Valid @RequestBody Pageable pageable) {
+    @GetMapping("/cart/user/{id}")
+    public ResponseEntity<List<CartDto>> getAllCards(@Valid @PathVariable("id") String userId, @Valid @RequestBody Pageable pageable) {
         log.debug("REST request to get all Card by pageable: {}", pageable);
         final Page<CartDto> page = cartService.getAllCart(userId, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/cart");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
