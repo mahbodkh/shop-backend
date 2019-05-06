@@ -19,6 +19,10 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
+    Optional<User> findOneByMobileAndActivationKeyAndActivatedFalse(String mobile, String activationKey);
+
+    Optional<User> findOneByEmailIgnoreCaseAndActivationKeyAndActivatedFalse(String email, String activationKey);
+
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
 
     Optional<User> findOneByResetKey(String resetKey);
@@ -27,7 +31,13 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findOneByLogin(String login);
 
-    Optional<User> findOneByMobile(Long mobile);
+    Optional<User> findOneByMobile(String mobile);
+
+    Optional<User> findOneByMobileAndActivatedTrue(String mobile);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
+
+    Optional<User> findByLogin(String username);
+
+
 }

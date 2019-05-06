@@ -9,9 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
 public abstract class AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @CreatedBy
@@ -64,5 +64,31 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractAuditingEntity that = (AbstractAuditingEntity) o;
+        return Objects.equals(createdBy, that.createdBy) &&
+                Objects.equals(createdDate, that.createdDate) &&
+                Objects.equals(lastModifiedBy, that.lastModifiedBy) &&
+                Objects.equals(lastModifiedDate, that.lastModifiedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(createdBy, createdDate, lastModifiedBy, lastModifiedDate);
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractAuditingEntity{" +
+                "createdBy='" + createdBy + '\'' +
+                ", createdDate=" + createdDate +
+                ", lastModifiedBy='" + lastModifiedBy + '\'' +
+                ", lastModifiedDate=" + lastModifiedDate +
+                '}';
     }
 }

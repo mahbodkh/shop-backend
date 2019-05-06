@@ -1,51 +1,44 @@
 package app.store.persistence.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "category")
 public class Category extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
     private ObjectId id;
-
-    @Field
-    private Integer level;
-
-    @Indexed
+    @TextIndexed(weight = 1)
     @Field
     @Size(min = 2, max = 100)
     private String name;
-
+    @TextIndexed(weight = 1)
     @Field
     @Size(min = 5, max = 2000)
     private String description;
-
+    @Field
+    private ObjectId parent;
     @Field
     private Integer member = 0;
-
     @Field
-    private Set<Category> parent = new HashSet<>();
-
+    private String path;            // path of the categories
     @Field
-    private Set<Category> child = new HashSet<>();
-
+    private String cover;           // url of the image
     @Field
-    private List<Asset> assetList = new ArrayList<>();
-
-    @JsonIgnore
-    private MultipartFile data;
+    private List<ObjectId> ancestors = new ArrayList<>();
+    @TextIndexed(weight = 2)
+    @Field
+    private List<String> facets = new ArrayList<>();
 
 
     public ObjectId getId() {
@@ -54,14 +47,6 @@ public class Category extends AbstractAuditingEntity implements Serializable {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 
     public String getName() {
@@ -80,6 +65,14 @@ public class Category extends AbstractAuditingEntity implements Serializable {
         this.description = description;
     }
 
+    public ObjectId getParent() {
+        return parent;
+    }
+
+    public void setParent(ObjectId parent) {
+        this.parent = parent;
+    }
+
     public Integer getMember() {
         return member;
     }
@@ -88,28 +81,36 @@ public class Category extends AbstractAuditingEntity implements Serializable {
         this.member = member;
     }
 
-    public Set<Category> getParent() {
-        return parent;
+    public String getPath() {
+        return path;
     }
 
-    public void setParent(Set<Category> parent) {
-        this.parent = parent;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public Set<Category> getChild() {
-        return child;
+    public String getCover() {
+        return cover;
     }
 
-    public void setChild(Set<Category> child) {
-        this.child = child;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
-    public List<Asset> getAssetList() {
-        return assetList;
+    public List<ObjectId> getAncestors() {
+        return ancestors;
     }
 
-    public void setAssetList(List<Asset> assetList) {
-        this.assetList = assetList;
+    public void setAncestors(List<ObjectId> ancestors) {
+        this.ancestors = ancestors;
+    }
+
+    public List<String> getFacets() {
+        return facets;
+    }
+
+    public void setFacets(List<String> facets) {
+        this.facets = facets;
     }
 
     @Override
@@ -125,18 +126,19 @@ public class Category extends AbstractAuditingEntity implements Serializable {
         return Objects.hash(id);
     }
 
+
     @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", level=" + level +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", member=" + member +
                 ", parent=" + parent +
-                ", child=" + child +
-                ", assetList=" + assetList +
-                ", data=" + data +
+                ", member=" + member +
+                ", path='" + path + '\'' +
+                ", cover='" + cover + '\'' +
+                ", ancestors=" + ancestors +
+                ", facets=" + facets +
                 '}';
     }
 }

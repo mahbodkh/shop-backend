@@ -1,5 +1,11 @@
 package app.store.service.dto;
 
+
+import app.store.service.dto.enums.CartStatusDto;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class CartDto {
 
     public CartDto() {
@@ -7,10 +13,11 @@ public class CartDto {
 
     private String id;
     private String userId;
-    private String productId;
+    private List<ProductCartDto> productCarts = new ArrayList<>();
     private Integer quantity = 0;
-    private Double price = 0d;
-    private Boolean completed = false;
+    private Double total = 0d;
+    private CartStatusDto status;
+
 
     public String getId() {
         return id;
@@ -28,12 +35,12 @@ public class CartDto {
         this.userId = userId;
     }
 
-    public String getProductId() {
-        return productId;
+    public List<ProductCartDto> getProductCarts() {
+        return productCarts;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductCarts(List<ProductCartDto> productCarts) {
+        this.productCarts = productCarts;
     }
 
     public Integer getQuantity() {
@@ -44,19 +51,19 @@ public class CartDto {
         this.quantity = quantity;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
-    public Boolean getCompleted() {
-        return completed;
+    public CartStatusDto getStatus() {
+        return status;
     }
 
-    public void setCompleted(Boolean completed) {
-        this.completed = completed;
+    public void setStatus(CartStatusDto status) {
+        this.status = status;
     }
 }

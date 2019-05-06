@@ -2,11 +2,15 @@ package app.store.persistence.domain.enums;
 
 public enum AssetType {
 
-    VIDEO,
+    IMAGE_ORIGINAL,
+    IMAGE_HIGH,
+    IMAGE_MEDIUM,
     IMAGE_THUMBNAIL,
-    IMAGE_ORIGENAL,
     IMAGE_BLUR,
-    AUDIO;
+
+    VIDEO_ORIGINAL,
+
+    AUDIO_ORIGINAL;
 
     AssetType() {
     }

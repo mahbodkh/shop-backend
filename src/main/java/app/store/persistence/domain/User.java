@@ -6,38 +6,32 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
     private ObjectId id;
 
-    @NotNull
-    @Size(min = 10, max = 10)
-    @Indexed(unique = true)
-    private Long mobile;
+    @Pattern(regexp = "^(9)[0-9]{9}")
+    @Indexed(unique = true, sparse = true)
+    private String mobile;
 
-    @NotNull
     @Size(min = 1, max = 50)
-    @Indexed
+    @Indexed(unique = true, sparse = true)
     private String login;
 
-    @JsonIgnore
     @NotNull
+    @JsonIgnore
     @Size(min = 60, max = 60)
     private String password;
 
@@ -51,11 +45,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Email
     @Size(min = 5, max = 254)
-    @Indexed(unique = true)
+    @Indexed(unique = true, sparse = true)
     private String email;
 
-    @Size(min = 2, max = 6)
     @Field
+    @Size(min = 2, max = 6)
     private String gender;
 
     private boolean activated = false;
@@ -69,8 +63,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String imageUrl;
 
     @Size(max = 20)
-    @Field("activation_key")
     @JsonIgnore
+    @Field("activation_key")
     private String activationKey;
 
     @Size(max = 20)
@@ -85,13 +79,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String cardNumber;
 
     @Field
-    private List<Address> addresses;
+    private List<Shipping> shippings = new ArrayList<>();
 
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
-
-    @JsonIgnore
-    private MultipartFile data;
 
 
     public ObjectId getId() {
@@ -102,11 +93,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Long mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
@@ -214,12 +205,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
+    public List<Shipping> getShippings() {
+        return shippings;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setShippings(List<Shipping> shippings) {
+        this.shippings = shippings;
     }
 
     public Set<Authority> getAuthorities() {
@@ -230,13 +221,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
-    public MultipartFile getData() {
-        return data;
-    }
-
-    public void setData(MultipartFile data) {
-        this.data = data;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -275,9 +259,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
                 ", resetKey='" + resetKey + '\'' +
                 ", resetDate=" + resetDate +
                 ", cardNumber='" + cardNumber + '\'' +
-                ", addresses=" + addresses +
+                ", shippings=" + shippings +
                 ", authorities=" + authorities +
-                ", data=" + data +
                 '}';
     }
 }

@@ -7,9 +7,4 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {Utils.class})
 public interface KeywordMapper extends EntityMapper<KeywordDto, Keyword> {
-    @Override
-    Keyword toEntity(KeywordDto dto);
-
-    @Override
-    KeywordDto toDto(Keyword entity);
 }

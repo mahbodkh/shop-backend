@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.util.TextHelper;
+
 public class DescriptionDto {
 
     private String language;
@@ -16,7 +18,7 @@ public class DescriptionDto {
     }
 
     public String getName() {
-        return name;
+        return TextHelper.toStandardPersian(name);
     }
 
     public void setName(String name) {
@@ -24,7 +26,7 @@ public class DescriptionDto {
     }
 
     public String getShortDescribe() {
-        return shortDescribe;
+        return TextHelper.toStandardPersian(shortDescribe);
     }
 
     public void setShortDescribe(String shortDescribe) {
@@ -32,7 +34,7 @@ public class DescriptionDto {
     }
 
     public String getLongDescribe() {
-        return longDescribe;
+        return TextHelper.toStandardPersian(longDescribe);
     }
 
     public void setLongDescribe(String longDescribe) {

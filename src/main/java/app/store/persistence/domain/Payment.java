@@ -1,6 +1,7 @@
 package app.store.persistence.domain;
 
 
+import app.store.persistence.domain.enums.PaymentMethod;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -10,24 +11,25 @@ import java.time.Instant;
 import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "payment")
-public class Payment implements Serializable {
-
+public class Payment extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     private ObjectId id;
-
     @Field
-    private ObjectId cartId;
-
+    private ObjectId userId;
+    @Field
+    private ObjectId invoiceId;
     @Field
     private ObjectId bankId;
-
     @Field
     private Double amount = 0d;
-
     @Field
     private Instant transaction;
+    @Field
+    private PaymentMethod method;
+    @Field
+    private Boolean isPaid = false;
 
 
     public ObjectId getId() {
@@ -38,12 +40,20 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public ObjectId getCartId() {
-        return cartId;
+    public ObjectId getUserId() {
+        return userId;
     }
 
-    public void setCartId(ObjectId cartId) {
-        this.cartId = cartId;
+    public void setUserId(ObjectId userId) {
+        this.userId = userId;
+    }
+
+    public ObjectId getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(ObjectId invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public ObjectId getBankId() {
@@ -70,6 +80,22 @@ public class Payment implements Serializable {
         this.transaction = transaction;
     }
 
+    public PaymentMethod getMethod() {
+        return method;
+    }
+
+    public void setMethod(PaymentMethod method) {
+        this.method = method;
+    }
+
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,14 +109,18 @@ public class Payment implements Serializable {
         return Objects.hash(id);
     }
 
+
     @Override
     public String toString() {
-        return "Payment{" +
+        return "PaymentMethod{" +
                 "id=" + id +
-                ", cartId=" + cartId +
+                ", userId=" + userId +
+                ", invoiceId=" + invoiceId +
                 ", bankId=" + bankId +
                 ", amount=" + amount +
                 ", transaction=" + transaction +
+                ", method=" + method +
+                ", isPaid=" + isPaid +
                 '}';
     }
 }

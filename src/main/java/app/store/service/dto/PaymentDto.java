@@ -1,5 +1,7 @@
 package app.store.service.dto;
 
+import app.store.service.dto.enums.PaymentMethodDto;
+
 import java.time.Instant;
 
 public class PaymentDto {
@@ -7,10 +9,13 @@ public class PaymentDto {
     }
 
     private String id;
-    private String cartId;
+    private String  userId;
+    private String invoiceId;
     private String bankId;
     private Double amount = 0d;
     private Instant transaction;
+    private PaymentMethodDto method;
+    private Boolean isPaid = false;
 
     public String getId() {
         return id;
@@ -20,12 +25,20 @@ public class PaymentDto {
         this.id = id;
     }
 
-    public String getCartId() {
-        return cartId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCartId(String cartId) {
-        this.cartId = cartId;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public String getBankId() {
@@ -50,5 +63,21 @@ public class PaymentDto {
 
     public void setTransaction(Instant transaction) {
         this.transaction = transaction;
+    }
+
+    public PaymentMethodDto getMethod() {
+        return method;
+    }
+
+    public void setMethod(PaymentMethodDto method) {
+        this.method = method;
+    }
+
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
     }
 }

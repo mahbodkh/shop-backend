@@ -10,16 +10,14 @@ import java.util.Objects;
 
 @org.springframework.data.mongodb.core.mapping.Document(collection = "keyword")
 public class Keyword implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
 
     @Id
     private ObjectId id;
-
+    @Field("lang_key")
+    private String language;
     @Field
     private String name;
-
     @Field
     private String description;
 
@@ -38,6 +36,14 @@ public class Keyword implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public String getDescription() {
